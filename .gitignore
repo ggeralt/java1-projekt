@@ -6,7 +6,6 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
-java1-projekt/assets/*
 
 *.class
 *.log
@@ -20,3 +19,5 @@ java1-projekt/assets/*
 *.rar
 hs_err_pid*
 replay_pid*
+
+java1-projekt/assets/*

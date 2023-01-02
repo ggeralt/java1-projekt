@@ -117,7 +117,7 @@ public class LogIn extends javax.swing.JFrame {
         try {
             String username = tfUsername.getText().trim();
             String password = tfPassword.getText().trim();
-            Optional<User> userLog = repository.selectUser(username);
+            Optional<User> userLog = repository.selectUserByUsername(username);
             
             if (!userLog.isPresent()) {
                 lblInfo.setForeground(Color.red);
@@ -152,7 +152,7 @@ public class LogIn extends javax.swing.JFrame {
         try {
             String username = tfUsername.getText().trim();
             String password = tfPassword.getText().trim();
-            Optional<User> userLog = repository.selectUser(username);
+            Optional<User> userLog = repository.selectUserByUsername(username);
             
             if (userLog.isPresent()) {
                 lblInfo.setForeground(Color.red);

@@ -54,12 +54,21 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE selectUser
+CREATE PROCEDURE selectUserByUsername
 	@Username NVARCHAR(25)
 AS
 BEGIN
 	SELECT * FROM [User] 
 	WHERE Username = @Username
+END
+GO
+
+CREATE PROCEDURE selectUserByID
+	@IDUser INT
+AS
+BEGIN
+	SELECT * FROM [User] 
+	WHERE IDUser = @IDUser
 END
 GO
 

@@ -29,7 +29,8 @@ public class SQLRepository implements Repository {
     private static final String CHECK_IF_USER_EXISTS = "{ CALL checkIfUserExists (?,?) }";
     private static final String CREATE_USER = "{ CALL createUser (?,?,?,?) }";
     private static final String DELETE_USER = "{ CALL deleteUser (?) }";
-    private static final String SELECT_USER = "{ CALL selectUser (?) }";
+    private static final String SELECT_USER_BY_ID = "{ CALL selectUserByID (?) }";
+    private static final String SELECT_USER_BY_USERNAME = "{ CALL selectUserByUsername (?) }";
     private static final String SELECT_USERS = "{ CALL selectUsers }";
     
     private static final String CREATE_ARTICLE = "{ CALL createArticle (?,?,?,?,?,?) }";
@@ -203,13 +204,39 @@ public class SQLRepository implements Repository {
     }
     
     @Override
-    public Optional<User> selectUser(String userName) throws Exception {
+    public Optional<User> selectUserByID(int id) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
-        try (Connection conn = dataSource.getConnection();
-                CallableStatement stmt = conn.prepareCall(SELECT_USER)) {
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_USER_BY_ID)) {
 
-            stmt.setString(1, userName);
+            stmt.setInt("@" + ID_USER, id);
+            
             try (ResultSet rs = stmt.executeQuery()) {
+
+                if (rs.next()) {
+                    return Optional.of(new User(
+                            rs.getInt(ID_USER),
+                            rs.getString(USERNAME),
+                            rs.getString(PASSWORD),
+                            rs.getInt(ROLE_ID)
+                    ));
+                }
+            }
+        }
+        
+        return Optional.empty();
+    }
+    
+    @Override
+    public Optional<User> selectUserByUsername(String username) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_USER_BY_USERNAME)) {
+
+            stmt.setString("@" + USERNAME, username);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+
                 if (rs.next()) {
                     return Optional.of(new User(
                             rs.getInt(ID_USER),
