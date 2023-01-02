@@ -3,6 +3,7 @@ package hr.algebra;
 import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.User;
+import java.awt.Color;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,10 +23,10 @@ public class LogIn extends javax.swing.JFrame {
         tfUsername = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        tfPassword = new javax.swing.JTextField();
         btnLogIn = new javax.swing.JButton();
         btnRegister = new javax.swing.JButton();
         lblInfo = new javax.swing.JLabel();
+        tfPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -46,8 +47,6 @@ public class LogIn extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setText("Password:");
 
-        tfPassword.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-
         btnLogIn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         btnLogIn.setText("Log In");
         btnLogIn.addActionListener(new java.awt.event.ActionListener() {
@@ -65,7 +64,8 @@ public class LogIn extends javax.swing.JFrame {
         });
 
         lblInfo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        lblInfo.setForeground(new java.awt.Color(255, 255, 0));
+
+        tfPassword.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,14 +77,14 @@ public class LogIn extends javax.swing.JFrame {
                     .addComponent(btnLogIn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
                     .addComponent(tfUsername)
-                    .addComponent(tfPassword)
+                    .addComponent(btnRegister, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(btnRegister, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(tfPassword))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -98,7 +98,7 @@ public class LogIn extends javax.swing.JFrame {
                 .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(14, 14, 14)
                 .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -106,7 +106,7 @@ public class LogIn extends javax.swing.JFrame {
                 .addComponent(btnLogIn)
                 .addGap(18, 18, 18)
                 .addComponent(btnRegister)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -120,7 +120,8 @@ public class LogIn extends javax.swing.JFrame {
             Optional<User> userLog = repository.selectUser(username);
             
             if (!userLog.isPresent()) {
-                lblInfo.setText("User does not exist. Please register a new account.");
+                lblInfo.setForeground(Color.red);
+                lblInfo.setText("Wrong username or password.");
                 return;
             }
             
@@ -129,8 +130,9 @@ public class LogIn extends javax.swing.JFrame {
                 mainWindow.setVisible(true);
                 this.setVisible(false);
             }
-            else{
-                lblInfo.setText("Incorrect password!");
+            else {
+                lblInfo.setForeground(Color.red);
+                lblInfo.setText("Wrong username or password.");
             }
             
         } catch (Exception ex) {
@@ -153,11 +155,13 @@ public class LogIn extends javax.swing.JFrame {
             Optional<User> userLog = repository.selectUser(username);
             
             if (userLog.isPresent()) {
+                lblInfo.setForeground(Color.red);
                 lblInfo.setText("User already exists. Please try using a different name.");
                 return;
             }
             
             repository.createUser(username, password, 2);
+            lblInfo.setForeground(Color.green);
             lblInfo.setText("User successfully created!");
             
         } catch (Exception ex) {
@@ -207,7 +211,7 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel lblInfo;
-    private javax.swing.JTextField tfPassword;
+    private javax.swing.JPasswordField tfPassword;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
 }

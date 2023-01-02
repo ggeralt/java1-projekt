@@ -307,7 +307,9 @@ public class EditArticlesPanel extends javax.swing.JPanel {
                 repository.updateArticle(selectedArticle.getId(), selectedArticle);
                 articlesTableModel.setArticles(repository.selectArticles());
 
-                clearForm();
+                fillForm(selectedArticle);
+                
+                MessageUtils.showInformationMessage("Article update", "Article successfully updated.");
             } catch (Exception ex) {
                 Logger.getLogger(EditArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
                 MessageUtils.showErrorMessage("Error", "Unable to update article!");

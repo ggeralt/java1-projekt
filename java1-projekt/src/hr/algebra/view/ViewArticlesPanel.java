@@ -10,11 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
-public class UploadArticlesPanel extends javax.swing.JPanel {
+public class ViewArticlesPanel extends javax.swing.JPanel {
     private DefaultListModel<Article> articlesModel;
     private Repository repository;
     
-    public UploadArticlesPanel() {
+    public ViewArticlesPanel() {
         initComponents();
         init();
     }
@@ -23,18 +23,9 @@ public class UploadArticlesPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnUploadArticles = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         lsArticles = new javax.swing.JList<>();
         lbRss = new javax.swing.JLabel();
-
-        btnUploadArticles.setText("Upload Articles");
-        btnUploadArticles.setActionCommand("Upload articles");
-        btnUploadArticles.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUploadArticlesActionPerformed(evt);
-            }
-        });
 
         jScrollPane1.setViewportView(lsArticles);
 
@@ -48,8 +39,7 @@ public class UploadArticlesPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1180, Short.MAX_VALUE)
-                    .addComponent(lbRss, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnUploadArticles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lbRss, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -59,26 +49,11 @@ public class UploadArticlesPanel extends javax.swing.JPanel {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 615, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbRss, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnUploadArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnUploadArticlesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadArticlesActionPerformed
-        try {
-            List<Article> articles = ArticleParser.parse();
-            repository.createArticles(articles);
-            loadModel();
-            
-        } catch (Exception ex) {
-            MessageUtils.showErrorMessage("Unrecoverable error", "Unable to upload articles");
-            System.exit(1);
-        }
-    }//GEN-LAST:event_btnUploadArticlesActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnUploadArticles;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbRss;
     private javax.swing.JList<Article> lsArticles;
@@ -91,7 +66,7 @@ public class UploadArticlesPanel extends javax.swing.JPanel {
             loadModel();
             lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());
         } catch (Exception ex) {
-            Logger.getLogger(UploadArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ViewArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
             System.exit(1);
         }

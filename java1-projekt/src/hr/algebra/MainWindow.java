@@ -4,7 +4,7 @@ import hr.algebra.model.User;
 import hr.algebra.utils.MessageUtils;
 import hr.algebra.view.AdminPanel;
 import hr.algebra.view.EditArticlesPanel;
-import hr.algebra.view.UploadArticlesPanel;
+import hr.algebra.view.ViewArticlesPanel;
 import java.util.Optional;
 import javax.swing.JOptionPane;
 
@@ -133,7 +133,7 @@ public class MainWindow extends javax.swing.JFrame {
             tpContent.add(ADMIN_ZONE, new AdminPanel());
         }
         else {
-            tpContent.add(UPLOAD_ARTICLES, new UploadArticlesPanel());
+            tpContent.add(UPLOAD_ARTICLES, new ViewArticlesPanel());
             tpContent.add(EDIT_ARTICLES, new EditArticlesPanel());
         }
     }

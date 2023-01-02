@@ -29,7 +29,7 @@ public class SQLRepository implements Repository {
     private static final String CHECK_IF_USER_EXISTS = "{ CALL checkIfUserExists (?,?) }";
     private static final String CREATE_USER = "{ CALL createUser (?,?,?,?) }";
     private static final String SELECT_USER = "{ CALL selectUser (?) }";
-    private static final String DELETE_USER = "{ CALL deleteUser {?} }";
+    private static final String DELETE_USER = "{ CALL deleteUser (?) }";
     
     private static final String CREATE_ARTICLE = "{ CALL createArticle (?,?,?,?,?,?) }";
     private static final String UPDATE_ARTICLE = "{ CALL updateArticle (?,?,?,?,?,?) }";

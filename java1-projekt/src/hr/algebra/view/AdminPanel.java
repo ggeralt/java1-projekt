@@ -2,12 +2,16 @@ package hr.algebra.view;
 
 import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
+import hr.algebra.model.Article;
+import hr.algebra.parser.rss.ArticleParser;
 import hr.algebra.utils.FileUtils;
 import hr.algebra.utils.MessageUtils;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 
 public class AdminPanel extends javax.swing.JPanel {
     private static final String ASSETS = "./assets";
@@ -26,6 +30,7 @@ public class AdminPanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         btnDeleteAllArticles = new javax.swing.JButton();
         btnDeleteUser = new javax.swing.JButton();
+        btnUploadArticles = new javax.swing.JButton();
 
         tfUsername.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
 
@@ -50,6 +55,16 @@ public class AdminPanel extends javax.swing.JPanel {
             }
         });
 
+        btnUploadArticles.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnUploadArticles.setForeground(new java.awt.Color(0, 255, 0));
+        btnUploadArticles.setText("Upload Articles");
+        btnUploadArticles.setActionCommand("Upload articles");
+        btnUploadArticles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUploadArticlesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -66,7 +81,10 @@ public class AdminPanel extends javax.swing.JPanel {
                         .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnDeleteUser)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnUploadArticles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -78,7 +96,9 @@ public class AdminPanel extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnDeleteUser)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 539, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 471, Short.MAX_VALUE)
+                .addComponent(btnUploadArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnDeleteAllArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
@@ -130,9 +150,22 @@ public class AdminPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDeleteUserActionPerformed
 
+    private void btnUploadArticlesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadArticlesActionPerformed
+        try {
+            List<Article> articles = ArticleParser.parse();
+            repository.createArticles(articles);
+            MessageUtils.showInformationMessage("Article upload", "Articles successfully uploaded.");
+
+        } catch (Exception ex) {
+            MessageUtils.showErrorMessage("Unrecoverable error", "Unable to upload articles");
+            System.exit(1);
+        }
+    }//GEN-LAST:event_btnUploadArticlesActionPerformed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteAllArticles;
     private javax.swing.JButton btnDeleteUser;
+    private javax.swing.JButton btnUploadArticles;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
