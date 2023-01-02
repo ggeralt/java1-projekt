@@ -28,8 +28,9 @@ public class SQLRepository implements Repository {
 
     private static final String CHECK_IF_USER_EXISTS = "{ CALL checkIfUserExists (?,?) }";
     private static final String CREATE_USER = "{ CALL createUser (?,?,?,?) }";
-    private static final String SELECT_USER = "{ CALL selectUser (?) }";
     private static final String DELETE_USER = "{ CALL deleteUser (?) }";
+    private static final String SELECT_USER = "{ CALL selectUser (?) }";
+    private static final String SELECT_USERS = "{ CALL selectUsers }";
     
     private static final String CREATE_ARTICLE = "{ CALL createArticle (?,?,?,?,?,?) }";
     private static final String UPDATE_ARTICLE = "{ CALL updateArticle (?,?,?,?,?,?) }";
@@ -162,11 +163,11 @@ public class SQLRepository implements Repository {
     }
 
     @Override
-    public int checkIfUserExists(String userName) throws Exception {
+    public int checkIfUserExists(String username) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(CHECK_IF_USER_EXISTS)) {
-            stmt.setString(1, userName);
+            stmt.setString(1, username);
             stmt.registerOutParameter(2, Types.INTEGER);
             stmt.executeUpdate();
             
@@ -221,5 +222,26 @@ public class SQLRepository implements Repository {
         }
         
         return Optional.empty();
+    }
+    
+    @Override
+    public List<User> selectUsers() throws Exception {
+        List<User> users = new ArrayList<>();
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_USERS);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                users.add(new User(
+                        rs.getInt(ID_USER),
+                        rs.getString(USERNAME),
+                        rs.getString(PASSWORD),
+                        rs.getInt(ROLE_ID)
+                ));
+            }
+        }
+        
+        return users;
     }
 }

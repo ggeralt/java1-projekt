@@ -1,7 +1,7 @@
 package hr.algebra.model;
 
 public class User {
-    private int idUser;
+    private int id;
     private String username;
     private String password;
     private int roleID;
@@ -13,24 +13,24 @@ public class User {
     }
 
     public User(int id, String userName, String password, int roleID) {
-        this.idUser = id;
+        this.id = id;
         this.username = userName;
         this.password = password;
         this.roleID = roleID;
     }
 
-    public User(int idUser, String userName, String password) {
-        this.idUser = idUser;
+    public User(int id, String userName, String password) {
+        this.id = id;
         this.username = userName;
         this.password = password;
     }
     
-    public int getIdUser() {
-        return idUser;
+    public int getId() {
+        return id;
     }
 
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -55,5 +55,16 @@ public class User {
 
     public void setRoleID(int roleID) {
         this.roleID = roleID;
+    }
+    
+    public String getRole() {
+        switch (roleID) {
+            case 1:
+                return "Administrator";
+            case 2:
+                return "User";
+            default:
+                return "N/A";
+        }
     }
 }
