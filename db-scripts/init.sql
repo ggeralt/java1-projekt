@@ -2,7 +2,7 @@ CREATE DATABASE Java1
 GO
 USE Java1
 GO
-
+select * from [User]
 -- TABLES --
 
 CREATE TABLE Article
@@ -43,8 +43,8 @@ GO
 -- PROCEDURES --
 
 CREATE PROCEDURE createUser
-	@Username NVARCHAR(25),
-	@Password NVARCHAR(600),
+	@Username NVARCHAR(50),
+	@Password NVARCHAR(50),
 	@RoleID INT,
 	@IDUser INT OUTPUT
 AS
@@ -54,28 +54,19 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE selectUserByUsername
-	@Username NVARCHAR(25)
-AS
-BEGIN
-	SELECT * FROM [User] 
-	WHERE Username = @Username
-END
-GO
-
-CREATE PROCEDURE selectUserByID
+CREATE PROCEDURE updateUser
+	@Username NVARCHAR(50),
+	@Password NVARCHAR(50),
+	@RoleID INT,
 	@IDUser INT
 AS
 BEGIN
-	SELECT * FROM [User] 
-	WHERE IDUser = @IDUser
-END
-GO
-
-CREATE PROCEDURE selectUsers
-AS 
-BEGIN 
-	SELECT * FROM [User]
+	UPDATE [User] SET 
+		Username = @Username,
+		[Password] = @Password,
+		RoleID = @RoleID
+	WHERE 
+		IDUser = @IDUser
 END
 GO
 
@@ -94,6 +85,31 @@ AS
 BEGIN
 	DELETE FROM [User] 
 	WHERE Username = @Username
+END
+GO
+
+CREATE PROCEDURE selectUserByID
+	@IDUser INT
+AS
+BEGIN
+	SELECT * FROM [User] 
+	WHERE IDUser = @IDUser
+END
+GO
+
+CREATE PROCEDURE selectUserByUsername
+	@Username NVARCHAR(25)
+AS
+BEGIN
+	SELECT * FROM [User] 
+	WHERE Username = @Username
+END
+GO
+
+CREATE PROCEDURE selectUsers
+AS 
+BEGIN 
+	SELECT * FROM [User]
 END
 GO
 

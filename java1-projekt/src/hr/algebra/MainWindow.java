@@ -28,7 +28,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         tpContent = new javax.swing.JTabbedPane();
         jLabel1 = new javax.swing.JLabel();
-        lblUsername = new javax.swing.JLabel();
+        lbUsername = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -36,8 +36,8 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("Hello,");
 
-        lblUsername.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblUsername.setForeground(new java.awt.Color(0, 153, 0));
+        lbUsername.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        lbUsername.setForeground(new java.awt.Color(0, 153, 0));
 
         btnLogout.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnLogout.setText("Logout");
@@ -57,7 +57,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lbUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLogout)
                 .addContainerGap())
@@ -68,7 +68,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
-                    .addComponent(lblUsername, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbUsername, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.CENTER))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tpContent, javax.swing.GroupLayout.PREFERRED_SIZE, 761, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -124,12 +124,12 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogout;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel lblUsername;
+    private javax.swing.JLabel lbUsername;
     private javax.swing.JTabbedPane tpContent;
     // End of variables declaration//GEN-END:variables
 
     private void configurePanels(Optional<User> user) {
-        lblUsername.setText(user.get().getUsername());
+        lbUsername.setText(user.get().getUsername());
 
         if (user.get().getRoleID() == 1) {
             tpContent.add(ARTICLE, new EditArticlesAdminPanel());
@@ -140,7 +140,7 @@ public class MainWindow extends javax.swing.JFrame {
             tpContent.add(EDIT_ARTICLES, new EditArticlesPanel());
         }
     }
-
+    
     private void logout() {
         int dialogResult = MessageUtils.showConfirmDialog("Logout", "Are you sure?");
         if (dialogResult == JOptionPane.YES_OPTION) {

@@ -27,6 +27,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
 
         btnDeleteAllArticles = new javax.swing.JButton();
         btnUploadArticles = new javax.swing.JButton();
+        lbRss = new javax.swing.JLabel();
 
         btnDeleteAllArticles.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnDeleteAllArticles.setForeground(new java.awt.Color(255, 0, 0));
@@ -47,6 +48,8 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
             }
         });
 
+        lbRss.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -57,21 +60,28 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
                     .addComponent(btnUploadArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeleteAllArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(403, 403, 403))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbRss, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(123, 123, 123)
+                .addContainerGap()
+                .addComponent(lbRss, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(74, 74, 74)
                 .addComponent(btnUploadArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(74, 74, 74)
                 .addComponent(btnDeleteAllArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void initRepository() {
         try {
             repository = RepositoryFactory.getRepository();
+            lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());
         } catch (Exception ex) {
             Logger.getLogger(EditArticlesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,5 +121,6 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteAllArticles;
     private javax.swing.JButton btnUploadArticles;
+    private javax.swing.JLabel lbRss;
     // End of variables declaration//GEN-END:variables
 }

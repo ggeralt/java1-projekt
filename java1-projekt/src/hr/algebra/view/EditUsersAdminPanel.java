@@ -140,6 +140,11 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
 
         btnUpdateUser.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         btnUpdateUser.setText("UPDATE");
+        btnUpdateUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateUserActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -272,10 +277,9 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
             }
             
             repository.createUser(username, password, 2);
-            MessageUtils.showInformationMessage("User created", "User: " + username + " successfully created!");
-            
             usersTableModel = new UserTableModel(repository.selectUsers());
             tables.forEach(tb -> tb.setModel(usersTableModel));
+            MessageUtils.showInformationMessage("User created", "User: " + username + " successfully created!");
         } catch (Exception ex) {
             Logger.getLogger(EditUsersAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -287,7 +291,41 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
 
     private void tbUpdateUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbUpdateUsersMouseClicked
         tbUpdateSelectedUser = getSelectedUserFromTable(tbUpdateUsers);
+        tfUpdateUsername.setText(tbUpdateSelectedUser.getUsername());
+        tfUpdatePassword.setText(tbUpdateSelectedUser.getPassword());
     }//GEN-LAST:event_tbUpdateUsersMouseClicked
+
+    private void btnUpdateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateUserActionPerformed
+        try {
+            String username = tfUpdateUsername.getText().trim();
+            String password = tfUpdatePassword.getText();
+        
+            if (tbUpdateSelectedUser == null) {
+                MessageUtils.showInformationMessage("User update not possible", "Please select a user from the table.");
+                return;
+            }
+        
+            if ("".equals(username) || "".equals(password)) {
+                MessageUtils.showErrorMessage("Empty credentials", "Cannot update user with empty credentials.");
+                return;
+            }
+            
+            repository.updateUser(tbUpdateSelectedUser.getId(), 
+                    new User(
+                            tbUpdateSelectedUser.getId(),
+                            tfUpdateUsername.getText().trim(),
+                            tfUpdatePassword.getText(),
+                            tbUpdateSelectedUser.getRoleID()
+                    ));
+            
+            usersTableModel.setUsers(repository.selectUsers());
+            tables.forEach(tb -> tb.setModel(usersTableModel));
+            MessageUtils.showInformationMessage("User update", "Selected user successfully updated.");
+        } catch (Exception ex) {
+            Logger.getLogger(EditArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("User Update Error", "Unable to update user.");
+        }
+    }//GEN-LAST:event_btnUpdateUserActionPerformed
 
     public User getSelectedUserFromTable(JTable table) {
         int selectedRow = table.getSelectedRow();

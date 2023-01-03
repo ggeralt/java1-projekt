@@ -312,7 +312,7 @@ public class EditArticlesPanel extends javax.swing.JPanel {
                 MessageUtils.showInformationMessage("Article update", "Article successfully updated.");
             } catch (Exception ex) {
                 Logger.getLogger(EditArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
-                MessageUtils.showErrorMessage("Error", "Unable to update article!");
+                MessageUtils.showErrorMessage("Article Update Error", "Unable to update article!");
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed

@@ -26,13 +26,14 @@ public class SQLRepository implements Repository {
     private static final String PICTURE_PATH = "PicturePath";
     private static final String PUBLISHED_DATE = "PublishedDate";
 
-    private static final String CHECK_IF_USER_EXISTS = "{ CALL checkIfUserExists (?,?) }";
     private static final String CREATE_USER = "{ CALL createUser (?,?,?,?) }";
+    private static final String UPDATE_USER = "{ CALL updateUser (?,?,?,?) }";
     private static final String DELETE_USER_BY_ID = "{ CALL deleteUserByID (?) }";
     private static final String DELETE_USER_BY_USERNAME = "{ CALL deleteUserByUsername (?) }";
     private static final String SELECT_USER_BY_ID = "{ CALL selectUserByID (?) }";
     private static final String SELECT_USER_BY_USERNAME = "{ CALL selectUserByUsername (?) }";
     private static final String SELECT_USERS = "{ CALL selectUsers }";
+    private static final String CHECK_IF_USER_EXISTS = "{ CALL checkIfUserExists (?,?) }";
     
     private static final String CREATE_ARTICLE = "{ CALL createArticle (?,?,?,?,?,?) }";
     private static final String UPDATE_ARTICLE = "{ CALL updateArticle (?,?,?,?,?,?) }";
@@ -165,19 +166,6 @@ public class SQLRepository implements Repository {
     }
 
     @Override
-    public int checkIfUserExists(String username) throws Exception {
-        DataSource dataSource = DataSourceSingleton.getInstance();
-        try (Connection con = dataSource.getConnection();
-                CallableStatement stmt = con.prepareCall(CHECK_IF_USER_EXISTS)) {
-            stmt.setString(1, username);
-            stmt.registerOutParameter(2, Types.INTEGER);
-            stmt.executeUpdate();
-            
-            return stmt.getInt(2);
-        }
-    }
-
-    @Override
     public int createUser(String username, String password, int role) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
@@ -192,6 +180,21 @@ public class SQLRepository implements Repository {
         }
     }
 
+    @Override
+    public void updateUser(int id, User data) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(UPDATE_USER)) {
+
+            stmt.setString("@" + USERNAME, data.getUsername());
+            stmt.setString("@" + PASSWORD, data.getPassword());
+            stmt.setInt("@" + ROLE_ID, data.getRoleID());
+            stmt.setInt("@" + ID_USER, id);
+
+            stmt.executeUpdate();
+        }
+    }
+    
     @Override
     public void deleteUserByID(int id) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
@@ -283,5 +286,18 @@ public class SQLRepository implements Repository {
         }
         
         return users;
+    }
+    
+    @Override
+    public int checkIfUserExists(String username) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(CHECK_IF_USER_EXISTS)) {
+            stmt.setString(1, username);
+            stmt.registerOutParameter(2, Types.INTEGER);
+            stmt.executeUpdate();
+            
+            return stmt.getInt(2);
+        }
     }
 }
