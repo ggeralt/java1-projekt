@@ -3,7 +3,7 @@ package hr.algebra;
 import hr.algebra.model.User;
 import hr.algebra.utils.MessageUtils;
 import hr.algebra.view.EditArticlesAdminPanel;
-import hr.algebra.view.EditUserAdminPanel;
+import hr.algebra.view.EditUsersAdminPanel;
 import hr.algebra.view.EditArticlesPanel;
 import hr.algebra.view.ViewArticlesPanel;
 import java.util.Optional;
@@ -133,7 +133,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         if (user.get().getRoleID() == 1) {
             tpContent.add(ARTICLE, new EditArticlesAdminPanel());
-            tpContent.add(USER, new EditUserAdminPanel());
+            tpContent.add(USER, new EditUsersAdminPanel());
         }
         else {
             tpContent.add(VIEW_ARTICLES, new ViewArticlesPanel());
