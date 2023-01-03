@@ -2,17 +2,18 @@ package hr.algebra;
 
 import hr.algebra.model.User;
 import hr.algebra.utils.MessageUtils;
-import hr.algebra.view.AdminPanel;
-import hr.algebra.view.EditAdminPanel;
+import hr.algebra.view.EditArticlesAdminPanel;
+import hr.algebra.view.EditUserAdminPanel;
 import hr.algebra.view.EditArticlesPanel;
 import hr.algebra.view.ViewArticlesPanel;
 import java.util.Optional;
 import javax.swing.JOptionPane;
 
 public class MainWindow extends javax.swing.JFrame {
-    private static final String UPLOAD_ARTICLES = "Upload articles";
+    private static final String VIEW_ARTICLES = "View articles";
     private static final String EDIT_ARTICLES = "Edit articles";
-    private static final String ADMIN_ZONE = "Admin zone";
+    private static final String ARTICLE = "Article";
+    private static final String USER = "User";
 
     public MainWindow(Optional<User> user) {
         initComponents();
@@ -36,7 +37,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setText("Hello,");
 
         lblUsername.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblUsername.setForeground(new java.awt.Color(0, 204, 0));
+        lblUsername.setForeground(new java.awt.Color(0, 153, 0));
 
         btnLogout.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnLogout.setText("Logout");
@@ -131,11 +132,11 @@ public class MainWindow extends javax.swing.JFrame {
         lblUsername.setText(user.get().getUsername());
 
         if (user.get().getRoleID() == 1) {
-            tpContent.add(ADMIN_ZONE, new AdminPanel());
-            tpContent.add(ADMIN_ZONE, new EditAdminPanel());
+            tpContent.add(ARTICLE, new EditArticlesAdminPanel());
+            tpContent.add(USER, new EditUserAdminPanel());
         }
         else {
-            tpContent.add(UPLOAD_ARTICLES, new ViewArticlesPanel());
+            tpContent.add(VIEW_ARTICLES, new ViewArticlesPanel());
             tpContent.add(EDIT_ARTICLES, new EditArticlesPanel());
         }
     }

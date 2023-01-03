@@ -79,7 +79,16 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE deleteUser
+CREATE PROCEDURE deleteUserByID
+	@IDUser INT
+AS
+BEGIN
+	DELETE FROM [User] 
+	WHERE IDUser = @IDUser
+END
+GO
+
+CREATE PROCEDURE deleteUserByUsername
 	@Username NVARCHAR(25)
 AS
 BEGIN

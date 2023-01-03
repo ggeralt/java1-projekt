@@ -28,7 +28,8 @@ public class SQLRepository implements Repository {
 
     private static final String CHECK_IF_USER_EXISTS = "{ CALL checkIfUserExists (?,?) }";
     private static final String CREATE_USER = "{ CALL createUser (?,?,?,?) }";
-    private static final String DELETE_USER = "{ CALL deleteUser (?) }";
+    private static final String DELETE_USER_BY_ID = "{ CALL deleteUserByID (?) }";
+    private static final String DELETE_USER_BY_USERNAME = "{ CALL deleteUserByUsername (?) }";
     private static final String SELECT_USER_BY_ID = "{ CALL selectUserByID (?) }";
     private static final String SELECT_USER_BY_USERNAME = "{ CALL selectUserByUsername (?) }";
     private static final String SELECT_USERS = "{ CALL selectUsers }";
@@ -192,10 +193,22 @@ public class SQLRepository implements Repository {
     }
 
     @Override
-    public void deleteUser(String username) throws Exception {
+    public void deleteUserByID(int id) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
-                CallableStatement stmt = con.prepareCall(DELETE_USER)) {
+                CallableStatement stmt = con.prepareCall(DELETE_USER_BY_ID)) {
+
+            stmt.setInt("@" + ID_USER, id);
+            
+            stmt.executeUpdate();
+        }
+    }
+    
+    @Override
+    public void deleteUserByUsername(String username) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(DELETE_USER_BY_USERNAME)) {
 
             stmt.setString("@" + USERNAME, username);
             

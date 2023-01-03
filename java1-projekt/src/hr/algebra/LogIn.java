@@ -119,6 +119,24 @@ public class LogIn extends javax.swing.JFrame {
             String password = tfPassword.getText().trim();
             Optional<User> userLog = repository.selectUserByUsername(username);
             
+            if ("".equals(username) && "".equals(password)) {
+                lblInfo.setForeground(Color.red);
+                lblInfo.setText("Empty username and password.");
+                return;
+            }
+            
+            if ("".equals(username)) {
+                lblInfo.setForeground(Color.red);
+                lblInfo.setText("Empty username.");
+                return; 
+            }
+            
+            if ("".equals(password)) {
+                lblInfo.setForeground(Color.red);
+                lblInfo.setText("Empty password.");
+                return;
+            }
+            
             if (!userLog.isPresent()) {
                 lblInfo.setForeground(Color.red);
                 lblInfo.setText("Wrong username or password.");
@@ -151,8 +169,14 @@ public class LogIn extends javax.swing.JFrame {
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         try {
             String username = tfUsername.getText().trim();
-            String password = tfPassword.getText().trim();
+            String password = tfPassword.getText();
             Optional<User> userLog = repository.selectUserByUsername(username);
+            
+            if ("".equals(username) || "".equals(password)) {
+                lblInfo.setForeground(Color.red);
+                lblInfo.setText("Cannot create user with empty credentials.");
+                return;
+            }
             
             if (userLog.isPresent()) {
                 lblInfo.setForeground(Color.red);
@@ -168,7 +192,7 @@ public class LogIn extends javax.swing.JFrame {
             Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnRegisterActionPerformed
-
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -214,4 +238,5 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JPasswordField tfPassword;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
+
 }

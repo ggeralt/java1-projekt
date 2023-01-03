@@ -7,7 +7,7 @@ public final class DataSourceSingleton {
     private static final String SERVER_NAME = "localhost";
     private static final String DATABASE_NAME = "Java1";
     private static final String USER = "sa"; 
-    private static final String PASSWORD = "sql"; 
+    private static final String PASSWORD = "SQL"; 
 
     private DataSourceSingleton() {}
 

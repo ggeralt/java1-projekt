@@ -11,13 +11,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ListSelectionModel;
 
-public class EditAdminPanel extends javax.swing.JPanel {
+public class EditUserAdminPanel extends javax.swing.JPanel {
 
     private Repository repository;
     private UserTableModel usersTableModel;
     private User selectedUser;
     
-    public EditAdminPanel() {
+    public EditUserAdminPanel() {
         initComponents();
     }
 
@@ -76,7 +76,7 @@ public class EditAdminPanel extends javax.swing.JPanel {
         jLabel2.setText("Delete user");
 
         btnCreateUser.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        btnCreateUser.setForeground(new java.awt.Color(0, 255, 0));
+        btnCreateUser.setForeground(new java.awt.Color(0, 153, 0));
         btnCreateUser.setText("CREATE");
         btnCreateUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -105,21 +105,21 @@ public class EditAdminPanel extends javax.swing.JPanel {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCreateUser, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE)
-                        .addGap(307, 307, 307))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(tfUsername))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(tfPassword)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(tfUsername))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(tfPassword)))
+                            .addGap(26, 26, 26)))
+                    .addComponent(btnCreateUser, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(300, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(20, 20, 20)
@@ -139,7 +139,7 @@ public class EditAdminPanel extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(tfUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(77, 77, 77)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(tfPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -161,18 +161,57 @@ public class EditAdminPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserActionPerformed
-        
+        if (selectedUser == null) {
+            MessageUtils.showInformationMessage("User deletion not possible", "Please select a user from the table.");
+        }
+        else if (selectedUser != null && "Administrator".equals(selectedUser.getRole())) {
+            MessageUtils.showInformationMessage("User deletion not allowed", "Deleting user with role 'Administrator' is not allowed by this means.");
+            selectedUser = null;
+        }
+        else if (selectedUser != null && !"Administrator".equals(selectedUser.getRole())) {
+            try {
+                repository.deleteUserByID(selectedUser.getId());
+                MessageUtils.showInformationMessage("User deletion", "Successfully deleted user: " + selectedUser.getUsername() + " (IDUser: " + selectedUser.getId() + ")");
+                selectedUser = null;
+                usersTableModel = new UserTableModel(repository.selectUsers());
+                tbUsers.setModel(usersTableModel);
+            } catch (Exception ex) {
+                Logger.getLogger(EditUserAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btnDeleteUserActionPerformed
 
     private void btnCreateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateUserActionPerformed
-        
+        try {
+            String username = tfUsername.getText().trim();
+            String password = tfPassword.getText();
+            Optional<User> userLog = repository.selectUserByUsername(username);
+            
+            if ("".equals(username) || "".equals(password)) {
+                MessageUtils.showErrorMessage("Empty credentials", "Cannot create user with empty credentials.");
+                return;
+            }
+            
+            if (userLog.isPresent()) {
+                MessageUtils.showErrorMessage("User already exists", "Please try using a different name.");
+                return;
+            }
+            
+            repository.createUser(username, password, 2);
+            MessageUtils.showInformationMessage("User created", "User: " + username + " successfully created!");
+            
+            usersTableModel = new UserTableModel(repository.selectUsers());
+            tbUsers.setModel(usersTableModel);
+        } catch (Exception ex) {
+            Logger.getLogger(EditUserAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnCreateUserActionPerformed
 
     private void tbUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbUsersMouseClicked
-        
+        getSelectedUser();
     }//GEN-LAST:event_tbUsersMouseClicked
 
-    public void showArticle() {
+    public void getSelectedUser() {
         int selectedRow = tbUsers.getSelectedRow();
         int rowIndex = tbUsers.convertRowIndexToModel(selectedRow);
         int selectedUserId = (int) usersTableModel.getValueAt(rowIndex, 0);
