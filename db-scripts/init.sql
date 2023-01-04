@@ -2,7 +2,7 @@ CREATE DATABASE Java1
 GO
 USE Java1
 GO
-select * from [User]
+
 -- TABLES --
 
 CREATE TABLE Article
