@@ -4,20 +4,30 @@ import hr.algebra.model.User;
 import hr.algebra.utils.MessageUtils;
 import hr.algebra.view.EditArticlesAdminPanel;
 import hr.algebra.view.EditUsersAdminPanel;
-import hr.algebra.view.EditArticlesPanel;
-import hr.algebra.view.ViewArticlesPanel;
+import hr.algebra.view.EditArticlesUserPanel;
+import hr.algebra.view.ViewArticlesUserPanel;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public class MainWindow extends javax.swing.JFrame {
     private static final String VIEW_ARTICLES = "View articles";
     private static final String EDIT_ARTICLES = "Edit articles";
     private static final String ARTICLE = "Article";
     private static final String USER = "User";
+    private static final String DEFAULT_THEME = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
 
     public MainWindow(Optional<User> user) {
         initComponents();
         configurePanels(user);
+        handleTheme();
     }
 
     private MainWindow() {}
@@ -30,6 +40,14 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         lbUsername = new javax.swing.JLabel();
         btnLogout = new javax.swing.JButton();
+        jMenuBar = new javax.swing.JMenuBar();
+        menuFile = new javax.swing.JMenu();
+        menuItemExit = new javax.swing.JMenuItem();
+        menuItemLogout = new javax.swing.JMenuItem();
+        menuView = new javax.swing.JMenu();
+        menuTheme = new javax.swing.JMenu();
+        menuHelp = new javax.swing.JMenu();
+        menuItemAbout = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,6 +65,56 @@ public class MainWindow extends javax.swing.JFrame {
                 btnLogoutActionPerformed(evt);
             }
         });
+
+        menuFile.setMnemonic('F');
+        menuFile.setText("File");
+        menuFile.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        menuItemExit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Q, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemExit.setText("Exit");
+        menuItemExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemExitActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemExit);
+
+        menuItemLogout.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemLogout.setText("Logout");
+        menuItemLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemLogoutActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemLogout);
+
+        jMenuBar.add(menuFile);
+
+        menuView.setMnemonic('V');
+        menuView.setText("View");
+        menuView.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        menuTheme.setMnemonic('T');
+        menuTheme.setText("Theme");
+        menuView.add(menuTheme);
+
+        jMenuBar.add(menuView);
+
+        menuHelp.setMnemonic('H');
+        menuHelp.setText("Help");
+        menuHelp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        menuItemAbout.setText("About");
+        menuItemAbout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemAboutActionPerformed(evt);
+            }
+        });
+        menuHelp.add(menuItemAbout);
+
+        jMenuBar.add(menuHelp);
+
+        setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,7 +135,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
                     .addComponent(lbUsername, javax.swing.GroupLayout.Alignment.CENTER, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.CENTER))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -82,6 +150,18 @@ public class MainWindow extends javax.swing.JFrame {
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         logout();
     }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void menuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExitActionPerformed
+        exit();
+    }//GEN-LAST:event_menuItemExitActionPerformed
+
+    private void menuItemLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLogoutActionPerformed
+        logout();
+    }//GEN-LAST:event_menuItemLogoutActionPerformed
+
+    private void menuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemAboutActionPerformed
+        JOptionPane.showMessageDialog(null, "Project name: java1-projekt\nAuthor: Jan Šantek\nProject source: https://github.com/ggeralt/java1-projekt", "About", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_menuItemAboutActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -127,7 +207,15 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogout;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JLabel lbUsername;
+    private javax.swing.JMenu menuFile;
+    private javax.swing.JMenu menuHelp;
+    private javax.swing.JMenuItem menuItemAbout;
+    private javax.swing.JMenuItem menuItemExit;
+    private javax.swing.JMenuItem menuItemLogout;
+    private javax.swing.JMenu menuTheme;
+    private javax.swing.JMenu menuView;
     private javax.swing.JTabbedPane tpContent;
     // End of variables declaration//GEN-END:variables
 
@@ -139,17 +227,51 @@ public class MainWindow extends javax.swing.JFrame {
             tpContent.add(USER, new EditUsersAdminPanel());
         }
         else {
-            tpContent.add(VIEW_ARTICLES, new ViewArticlesPanel());
-            tpContent.add(EDIT_ARTICLES, new EditArticlesPanel());
+            tpContent.add(VIEW_ARTICLES, new ViewArticlesUserPanel());
+            tpContent.add(EDIT_ARTICLES, new EditArticlesUserPanel());
         }
     }
     
     private void logout() {
         int dialogResult = MessageUtils.showConfirmDialog("Logout", "Are you sure?");
         if (dialogResult == JOptionPane.YES_OPTION) {
+            setDefaultTheme();
             this.dispose();
             LogIn logIn = new LogIn();
             logIn.setVisible(true);
+        }
+    }
+    
+    private void exit() {
+        int dialogResult = MessageUtils.showConfirmDialog("Exit application", "Are you sure?");
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
+
+    private void handleTheme() {
+        ButtonGroup bg = new ButtonGroup();
+        Arrays.asList(UIManager.getInstalledLookAndFeels()).forEach(info -> {
+            JRadioButtonMenuItem mi = new JRadioButtonMenuItem(info.getName());
+            menuTheme.add(mi);
+            bg.add(mi);
+            mi.setSelected("Nimbus".equals(info.getName()));
+            mi.addActionListener(e -> {
+                try {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    SwingUtilities.updateComponentTreeUI(MainWindow.this);
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        });
+    }
+    
+    private void setDefaultTheme() {
+        try {
+            UIManager.setLookAndFeel(DEFAULT_THEME);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

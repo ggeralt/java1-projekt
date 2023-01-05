@@ -279,7 +279,7 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
             repository.createUser(username, password, 2);
             usersTableModel = new UserTableModel(repository.selectUsers());
             tables.forEach(tb -> tb.setModel(usersTableModel));
-            MessageUtils.showInformationMessage("User created", "User: " + username + " successfully created!");
+            MessageUtils.showInformationMessage("User created", "User '" + username + "' successfully created!");
         } catch (Exception ex) {
             Logger.getLogger(EditUsersAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -322,7 +322,7 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
             tables.forEach(tb -> tb.setModel(usersTableModel));
             MessageUtils.showInformationMessage("User update", "Selected user successfully updated.");
         } catch (Exception ex) {
-            Logger.getLogger(EditArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditUsersAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("User Update Error", "Unable to update user.");
         }
     }//GEN-LAST:event_btnUpdateUserActionPerformed
@@ -338,7 +338,7 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
                 return optUser.get();
             }
         } catch (Exception ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditUsersAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Error", "Unable to show article!");
         }
         
@@ -365,7 +365,7 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
             initRepository();
             initTables();
         } catch (Exception ex) {
-            Logger.getLogger(EditArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditUsersAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
             System.exit(1);
         }

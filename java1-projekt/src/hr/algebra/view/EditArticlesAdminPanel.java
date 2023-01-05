@@ -124,7 +124,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
             loadModel();
             lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());
         } catch (Exception ex) {
-            Logger.getLogger(ViewArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditArticlesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
             System.exit(1);
         }

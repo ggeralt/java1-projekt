@@ -10,11 +10,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
-public class ViewArticlesPanel extends javax.swing.JPanel {
+public class ViewArticlesUserPanel extends javax.swing.JPanel {
     private DefaultListModel<Article> articlesModel;
     private Repository repository;
     
-    public ViewArticlesPanel() {
+    public ViewArticlesUserPanel() {
         initComponents();
         init();
     }
@@ -66,7 +66,7 @@ public class ViewArticlesPanel extends javax.swing.JPanel {
             loadModel();
             lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());
         } catch (Exception ex) {
-            Logger.getLogger(ViewArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
             System.exit(1);
         }

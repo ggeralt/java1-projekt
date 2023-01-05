@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.text.JTextComponent;
 
-public class EditArticlesPanel extends javax.swing.JPanel {
+public class EditArticlesUserPanel extends javax.swing.JPanel {
     private List<JTextComponent> validationFields;
     private List<JLabel> errorLabels;
 
@@ -36,7 +36,7 @@ public class EditArticlesPanel extends javax.swing.JPanel {
 
     private Article selectedArticle;
     
-    public EditArticlesPanel() {
+    public EditArticlesUserPanel() {
         initComponents();
     }
 
@@ -268,7 +268,7 @@ public class EditArticlesPanel extends javax.swing.JPanel {
 
                 clearForm();
             } catch (Exception ex) {
-                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
                 MessageUtils.showErrorMessage("Error", "Unable to create article!");
             }
         }
@@ -311,7 +311,7 @@ public class EditArticlesPanel extends javax.swing.JPanel {
                 
                 MessageUtils.showInformationMessage("Article update", "Article successfully updated.");
             } catch (Exception ex) {
-                Logger.getLogger(EditArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
                 MessageUtils.showErrorMessage("Article Update Error", "Unable to update article!");
             }
         }
@@ -335,7 +335,7 @@ public class EditArticlesPanel extends javax.swing.JPanel {
 
                 clearForm();
             } catch (Exception ex) {
-                Logger.getLogger(EditArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
                 MessageUtils.showErrorMessage("Error", "Unable to delete article!");
             }
         }
@@ -369,7 +369,7 @@ public class EditArticlesPanel extends javax.swing.JPanel {
                 fillForm(selectedArticle);
             }
         } catch (Exception ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Error", "Unable to show article!");
         }
     }
@@ -413,7 +413,7 @@ public class EditArticlesPanel extends javax.swing.JPanel {
             initRepository();
             initTable();
         } catch (Exception ex) {
-            Logger.getLogger(EditArticlesPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
             System.exit(1);
         }
@@ -452,7 +452,7 @@ public class EditArticlesPanel extends javax.swing.JPanel {
         try {
             label.setIcon(IconUtils.createIcon(file, label.getWidth(), label.getHeight()));
         } catch (IOException ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Error", "Unable to set icon!");
         }
     }
