@@ -29,12 +29,14 @@ public class SQLRepository implements Repository {
     private static final String DESCRIPTION = "Description";
     private static final String PICTURE_PATH = "PicturePath";
     private static final String PUBLISHED_DATE = "PublishedDate";
+    private static final String CATEGORY_ID = "CategoryID";
 
     private static final String CREATE_CATEGORY = "{ CALL createCategory (?,?) }";
     private static final String UPDATE_CATEGORY = "{ CALL updateCategory (?,?) }";
     private static final String DELETE_CATEGORY = "{ CALL deleteCategory (?) }";
     private static final String DELETE_ALL_CATEGORIES = "{ CALL deleteAllCategories }";
-    private static final String SELECT_CATEGORY = "{ CALL selectCategory (?) }";
+    private static final String SELECT_CATEGORY_BY_ID = "{ CALL selectCategoryByID (?) }";
+    private static final String SELECT_CATEGORY_BY_NAME = "{ CALL selectCategoryByName (?) }";
     private static final String SELECT_CATEGORIES = "{ CALL selectCategories }";
     
     private static final String CREATE_USER = "{ CALL createUser (?,?,?,?) }";
@@ -64,6 +66,7 @@ public class SQLRepository implements Repository {
             stmt.setString("@" + DESCRIPTION, article.getDescription());
             stmt.setString("@" + PICTURE_PATH, article.getPicturePath());
             stmt.setString("@" + PUBLISHED_DATE, article.getPublishedDate().format(Article.DATE_FORMATTER));
+            stmt.setInt("@" + CATEGORY_ID, article.getCategoryId());
             stmt.registerOutParameter("@" + ID_ARTICLE, Types.INTEGER);
 
             stmt.executeUpdate();
@@ -84,6 +87,7 @@ public class SQLRepository implements Repository {
                 stmt.setString("@" + DESCRIPTION, article.getDescription());
                 stmt.setString("@" + PICTURE_PATH, article.getPicturePath());
                 stmt.setString("@" + PUBLISHED_DATE, article.getPublishedDate().format(Article.DATE_FORMATTER));
+                stmt.setInt("@" + CATEGORY_ID, article.getCategoryId());
                 stmt.registerOutParameter("@" + ID_ARTICLE, Types.INTEGER);
 
                 stmt.executeUpdate();
@@ -102,6 +106,7 @@ public class SQLRepository implements Repository {
             stmt.setString("@" + DESCRIPTION, data.getDescription());
             stmt.setString("@" + PICTURE_PATH, data.getPicturePath());
             stmt.setString("@" + PUBLISHED_DATE, data.getPublishedDate().format(Article.DATE_FORMATTER));
+            stmt.setInt("@" + CATEGORY_ID, data.getCategoryId());
             stmt.setInt("@" + ID_ARTICLE, id);
 
             stmt.executeUpdate();
@@ -141,7 +146,9 @@ public class SQLRepository implements Repository {
                             rs.getString(LINK),
                             rs.getString(DESCRIPTION),
                             rs.getString(PICTURE_PATH),
-                            LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER)));
+                            LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER),
+                            rs.getInt(CATEGORY_ID))
+                    );
                 }
             }
         }
@@ -157,14 +164,16 @@ public class SQLRepository implements Repository {
                 CallableStatement stmt = con.prepareCall(SELECT_ARTICLES);
                 ResultSet rs = stmt.executeQuery()) {
 
-            while (rs.next()) {
+            while (rs.next()) {                
                 articles.add(new Article(
                         rs.getInt(ID_ARTICLE),
                         rs.getString(TITLE),
                         rs.getString(LINK),
                         rs.getString(DESCRIPTION),
                         rs.getString(PICTURE_PATH),
-                        LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER)));
+                        LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER),
+                        rs.getInt(CATEGORY_ID))
+                );
             }
         }
         
@@ -308,17 +317,15 @@ public class SQLRepository implements Repository {
     }
 
     @Override
-    public int createCategory(Category category) throws Exception {
+    public int createCategory(String name) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(CREATE_CATEGORY)) {
-
-            stmt.setString("@" + NAME, category.getName());
-            stmt.registerOutParameter("@" + ID_CATEGORY, Types.INTEGER);
-
+            stmt.setString(1, name);
+            stmt.registerOutParameter(2, Types.INTEGER);
             stmt.executeUpdate();
             
-            return stmt.getInt("@" + ID_CATEGORY);
+            return stmt.getInt(2);
         }
     }
 
@@ -353,17 +360,18 @@ public class SQLRepository implements Repository {
     }
 
     @Override
-    public Optional<Category> selectCategory(int id) throws Exception {
+    public Optional<Category> selectCategoryByID(int id) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
-                CallableStatement stmt = con.prepareCall(SELECT_CATEGORY)) {
+                CallableStatement stmt = con.prepareCall(SELECT_CATEGORY_BY_ID)) {
 
             stmt.setInt("@" + ID_CATEGORY, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return Optional.of(new Category(
                             rs.getInt(ID_CATEGORY),
-                            rs.getString(NAME)));
+                            rs.getString(NAME))
+                    );
                 }
             }
         }
@@ -371,6 +379,28 @@ public class SQLRepository implements Repository {
         return Optional.empty();
     }
 
+    @Override
+    public Optional<Category> selectCategoryByName(String name) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_CATEGORY_BY_NAME)) {
+
+            stmt.setString("@" + NAME, name);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                if (rs.next()) {
+                    return Optional.of(new Category(
+                            rs.getInt(ID_CATEGORY),
+                            rs.getString(NAME)
+                    ));
+                }
+            }
+        }
+        
+        return Optional.empty();
+    }
+    
     @Override
     public List<Category> selectCategories() throws Exception {
         List<Category> categories = new ArrayList<>();
@@ -382,7 +412,8 @@ public class SQLRepository implements Repository {
             while (rs.next()) {
                 categories.add(new Category(
                         rs.getInt(ID_CATEGORY),
-                        rs.getString(NAME)));
+                        rs.getString(NAME))
+                );
             }
         }
         

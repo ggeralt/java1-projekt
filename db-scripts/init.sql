@@ -15,12 +15,12 @@ GO
 CREATE TABLE Article
 (
 	IDArticle INT PRIMARY KEY IDENTITY,
-	Title NVARCHAR(300) NULL,
-	Link NVARCHAR(300) NULL,
-	[Description] NVARCHAR(900) NULL,
-	PicturePath NVARCHAR(90) NULL,
-	PublishedDate NVARCHAR(90) NULL,
-	CategoryID INT FOREIGN KEY REFERENCES [Category](IDCategory) NULL
+	Title NVARCHAR(300),
+	Link NVARCHAR(300),
+	[Description] NVARCHAR(900),
+	PicturePath NVARCHAR(90),
+	PublishedDate NVARCHAR(90),
+	CategoryID INT FOREIGN KEY REFERENCES [Category](IDCategory)
 )
 GO
 
@@ -35,7 +35,7 @@ CREATE TABLE [User]
 (
 	IDUser INT PRIMARY KEY IDENTITY,
 	Username NVARCHAR(25) NOT NULL,
-	[Password] NVARCHAR(600) NOT NULL,
+	[Password] NVARCHAR(50) NOT NULL,
 	RoleID INT FOREIGN KEY REFERENCES [Role](IDRole) NOT NULL
 )
 GO
@@ -54,7 +54,7 @@ GO
 -- PROCEDURES --
 
 CREATE PROCEDURE createUser
-	@Username NVARCHAR(50),
+	@Username NVARCHAR(25),
 	@Password NVARCHAR(50),
 	@RoleID INT,
 	@IDUser INT OUTPUT
@@ -66,7 +66,7 @@ END
 GO
 
 CREATE PROCEDURE updateUser
-	@Username NVARCHAR(50),
+	@Username NVARCHAR(25),
 	@Password NVARCHAR(50),
 	@RoleID INT,
 	@IDUser INT
@@ -252,12 +252,21 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE selectCategory
+CREATE PROCEDURE selectCategoryByID
 	@IDCategory INT
-AS 
-BEGIN 
+AS
+BEGIN
 	SELECT * FROM Category
 	WHERE IDCategory = @IDCategory
+END
+GO
+
+CREATE PROCEDURE selectCategoryByName
+	@Name NVARCHAR(25)
+AS
+BEGIN
+	SELECT * FROM Category
+	WHERE [Name] = @Name
 END
 GO
 

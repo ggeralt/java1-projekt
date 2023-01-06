@@ -3,11 +3,13 @@ package hr.algebra.view;
 import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Article;
+import hr.algebra.model.Category;
 import hr.algebra.parser.rss.ArticleParser;
 import hr.algebra.utils.FileUtils;
 import hr.algebra.utils.MessageUtils;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +19,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
     private static final String ASSETS = "./assets";
     private DefaultListModel<Article> articlesModel;
     private Repository repository;
+    private List<Category> categories = new ArrayList<>();
     
     public EditArticlesAdminPanel() {
         initComponents();
@@ -123,10 +126,12 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
     private void btnUploadArticlesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadArticlesActionPerformed
         try {
             List<Article> articles = ArticleParser.parse();
+            articles.forEach(a -> a.setCategoryId(categories.get(0)));
             repository.createArticles(articles);
             loadModel();
             MessageUtils.showInformationMessage("Article upload", "Articles successfully uploaded.");
         } catch (Exception ex) {
+            Logger.getLogger(EditArticlesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Unrecoverable error", "Unable to upload articles");
             System.exit(1);
         }
@@ -146,6 +151,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
     private void init() {
         try {
             repository = RepositoryFactory.getRepository();
+            categories = repository.selectCategories();
             articlesModel = new DefaultListModel<>();
             loadModel();
             lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());

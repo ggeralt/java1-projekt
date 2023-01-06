@@ -12,21 +12,34 @@ public class Article {
     private String description;
     private String picturePath;
     private LocalDateTime publishedDate;
-    private Category category;
+    private int categoryId;
 
     public Article() {}
     
-    public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate, Category category) {
+    /*public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate) {
         this.title = title;
         this.link = link;
         this.description = description;
         this.picturePath = picturePath;
         this.publishedDate = publishedDate;
-        this.category = category;
     }
     
-    public Article(int id, String title, String link, String description, String picturePath, LocalDateTime publishedDate, Category category) {
-        this(title, link, description, picturePath, publishedDate, category);
+    public Article(int id, String title, String link, String description, String picturePath, LocalDateTime publishedDate) {
+        this(title, link, description, picturePath, publishedDate);
+        this.id = id;
+    }*/
+    
+    public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate, int categoryId) {
+        this.title = title;
+        this.link = link;
+        this.description = description;
+        this.picturePath = picturePath;
+        this.publishedDate = publishedDate;
+        this.categoryId = categoryId;
+    }
+    
+    public Article(int id, String title, String link, String description, String picturePath, LocalDateTime publishedDate, int categoryId) {
+        this(title, link, description, picturePath, publishedDate, categoryId);
         this.id = id;
     }
 
@@ -74,12 +87,12 @@ public class Article {
         this.publishedDate = publishedDate;
     }
 
-    public Category getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(Category category) {
+        this.categoryId = category.getId();
     }
     
     @Override

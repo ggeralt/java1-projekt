@@ -4,8 +4,8 @@ import hr.algebra.model.Article;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-public class ArticleTableModel extends AbstractTableModel{
-    private static final String[] COLUMN_NAMES = {"Id", "Title", "Link", "Description", "Picture path", "Published date"};
+public class ArticleTableModel extends AbstractTableModel {
+    private static final String[] COLUMN_NAMES = {"ID", "Title", "Link", "Description", "Picture path", "Published date", "CategoryID"};
     
     private List<Article> articles;
 
@@ -43,6 +43,8 @@ public class ArticleTableModel extends AbstractTableModel{
                 return articles.get(rowIndex).getPicturePath();
             case 5:
                 return articles.get(rowIndex).getPublishedDate().format(Article.DATE_FORMATTER);
+            case 6:
+                return articles.get(rowIndex).getCategoryId();
             default:
                 throw new RuntimeException("No such column");
         }
@@ -59,6 +61,7 @@ public class ArticleTableModel extends AbstractTableModel{
             case 0:
                 return Integer.class;
         }
+        
         return super.getColumnClass(columnIndex); 
     }
 }

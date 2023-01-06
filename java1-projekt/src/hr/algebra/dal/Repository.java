@@ -24,11 +24,11 @@ public interface Repository {
     Optional<Article> selectArticle(int id) throws Exception;
     List<Article> selectArticles() throws Exception;
     
-    int createCategory(Category category) throws Exception;
+    int createCategory(String name) throws Exception;
     void updateCategory(int id, Category data) throws Exception;
     void deleteCategory(int id) throws Exception;
     void deleteAllCategories() throws Exception;
-    Optional<Category> selectCategory(int id) throws Exception;
+    Optional<Category> selectCategoryByID(int id) throws Exception;
+    Optional<Category> selectCategoryByName(String name) throws Exception;
     List<Category> selectCategories() throws Exception;
-    
 }

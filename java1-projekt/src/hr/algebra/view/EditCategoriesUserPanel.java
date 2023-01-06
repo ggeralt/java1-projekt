@@ -1,13 +1,11 @@
 package hr.algebra.view;
 
-import hr.algebra.MainWindow;
 import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Category;
-import hr.algebra.model.User;
 import hr.algebra.utils.MessageUtils;
 import hr.algebra.view.model.ArticleTableModel;
-import hr.algebra.view.model.UserTableModel;
+import hr.algebra.view.model.CategoryTableModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +17,7 @@ import javax.swing.ListSelectionModel;
 public class EditCategoriesUserPanel extends javax.swing.JPanel {
 
     private Repository repository;
-    private ArticleTableModel articlesTableModel;
+    private CategoryTableModel categoriesTableModel;
     private Category tbDeleteSelectedCategory;
     private Category tbUpdateSelectedCategory;
     private final List<JTable> tables = new ArrayList<>();
@@ -141,20 +139,25 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnDeleteCategory, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(tfCreateCategory))
-                        .addComponent(btnCreateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnDeleteCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(24, 24, 24)
+                                .addComponent(btnCreateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(372, 372, 372)
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tfCreateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
@@ -179,10 +182,10 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnDeleteCategory)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btnCreateCategory)
-                                .addComponent(btnUpdateCategory))))
+                                .addComponent(btnDeleteCategory)
+                                .addComponent(btnCreateCategory))
+                            .addComponent(btnUpdateCategory)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -210,8 +213,8 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
                 repository.deleteCategory(tbDeleteSelectedCategory.getId());
                 MessageUtils.showInformationMessage("Category deletion", "Successfully deleted category: " + tbDeleteSelectedCategory.getName() + " (IDCategory: " + tbDeleteSelectedCategory.getId() + ")");
                 tbDeleteSelectedCategory = null;
-                articlesTableModel = new ArticleTableModel(repository.selectArticles());
-                tables.forEach(tb -> tb.setModel(articlesTableModel));
+                categoriesTableModel = new CategoryTableModel(repository.selectCategories());
+                tables.forEach(tb -> tb.setModel(categoriesTableModel));
             } catch (Exception ex) {
                 Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -233,9 +236,10 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
                 return;
             }
             
-            repository.createCategory(tbDeleteSelectedCategory);
-            articlesTableModel = new ArticleTableModel(repository.selectArticles());
-            tables.forEach(tb -> tb.setModel(articlesTableModel));
+            repository.createCategory(name);
+            categoriesTableModel = new CategoryTableModel(repository.selectCategories());
+            tables.forEach(tb -> tb.setModel(categoriesTableModel));
+            tfCreateCategory.setText("");
             MessageUtils.showInformationMessage("Category created", "Category '" + name + "' successfully created!");
         } catch (Exception ex) {
             Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -271,8 +275,8 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
                             tfUpdateCategory.getText().trim()
                     ));
             
-            articlesTableModel.setArticles(repository.selectArticles());
-            tables.forEach(tb -> tb.setModel(articlesTableModel));
+            categoriesTableModel.setCategories(repository.selectCategories());
+            tables.forEach(tb -> tb.setModel(categoriesTableModel));
             MessageUtils.showInformationMessage("Category update", "Selected category successfully updated.");
         } catch (Exception ex) {
             Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -283,7 +287,7 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
     public Category getSelectedCategoryFromTable(JTable table) {
         int selectedRow = table.getSelectedRow();
         int rowIndex = table.convertRowIndexToModel(selectedRow);
-        int selectedCategoryId = (int) articlesTableModel.getValueAt(rowIndex, 0);
+        int selectedCategoryId = (int) categoriesTableModel.getValueAt(rowIndex, 0);
 
         try {
             Optional<Category> optCategory = repository.selectCategoryByID(selectedCategoryId);
@@ -309,8 +313,8 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
         tables.forEach(tb -> tb.setSelectionMode(ListSelectionModel.SINGLE_SELECTION));
         tables.forEach(tb -> tb.setAutoCreateRowSorter(true));
         tables.forEach(tb -> tb.setRowHeight(25));
-        articlesTableModel = new ArticleTableModel(repository.selectArticles());
-        tables.forEach(tb -> tb.setModel(articlesTableModel));
+        categoriesTableModel = new CategoryTableModel(repository.selectCategories());
+        tables.forEach(tb -> tb.setModel(categoriesTableModel));
     }
 
     private void init() {

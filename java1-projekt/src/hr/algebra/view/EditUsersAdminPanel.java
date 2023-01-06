@@ -279,6 +279,8 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
             repository.createUser(username, password, 2);
             usersTableModel = new UserTableModel(repository.selectUsers());
             tables.forEach(tb -> tb.setModel(usersTableModel));
+            tfCreateUsername.setText("");
+            tfCreatePassword.setText("");
             MessageUtils.showInformationMessage("User created", "User '" + username + "' successfully created!");
         } catch (Exception ex) {
             Logger.getLogger(EditUsersAdminPanel.class.getName()).log(Level.SEVERE, null, ex);

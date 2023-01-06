@@ -1,44 +1,40 @@
 package hr.algebra.view.model;
 
-import hr.algebra.model.User;
+import hr.algebra.model.Category;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
-public class UserTableModel extends AbstractTableModel {
-    private static final String[] COLUMN_NAMES = {"IDUser", "Username", "Password", "Role"};
+public class CategoryTableModel extends AbstractTableModel {
+    private static final String[] COLUMN_NAMES = {"ID", "Name"};
     
-    private List<User> users;
+    private List<Category> categories;
 
-    public UserTableModel(List<User> users) {
-        this.users = users;
+    public CategoryTableModel(List<Category> categories) {
+        this.categories = categories;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
         fireTableDataChanged();
     }
-
+    
     @Override
     public int getRowCount() {
-        return users.size();
+        return categories.size();
     }
 
     @Override
     public int getColumnCount() {
-        return User.class.getDeclaredFields().length;
+        return Category.class.getDeclaredFields().length;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return users.get(rowIndex).getId();
+                return categories.get(rowIndex).getId();
             case 1:
-                return users.get(rowIndex).getUsername();
-            case 2:
-                return users.get(rowIndex).getPassword();
-            case 3:
-                return users.get(rowIndex).getRole();
+                return categories.get(rowIndex).getName();
             default:
                 throw new RuntimeException("No such column");
         }
