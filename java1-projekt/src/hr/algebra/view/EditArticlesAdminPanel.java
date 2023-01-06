@@ -32,8 +32,9 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
         lbRss = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         lsArticles = new javax.swing.JList<>();
+        btnDeleteAllCategories = new javax.swing.JButton();
 
-        btnDeleteAllArticles.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnDeleteAllArticles.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnDeleteAllArticles.setForeground(new java.awt.Color(255, 0, 0));
         btnDeleteAllArticles.setText("DELETE ALL ARTICLES");
         btnDeleteAllArticles.addActionListener(new java.awt.event.ActionListener() {
@@ -56,6 +57,15 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
 
         jScrollPane2.setViewportView(lsArticles);
 
+        btnDeleteAllCategories.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDeleteAllCategories.setForeground(new java.awt.Color(255, 0, 0));
+        btnDeleteAllCategories.setText("DELETE ALL CATEGORIES");
+        btnDeleteAllCategories.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteAllCategoriesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -67,8 +77,10 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
                     .addComponent(lbRss, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnUploadArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 521, Short.MAX_VALUE)
-                        .addComponent(btnDeleteAllArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 576, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnDeleteAllArticles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDeleteAllCategories, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -77,12 +89,15 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(lbRss, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 559, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDeleteAllArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUploadArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(53, 53, 53))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnUploadArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnDeleteAllArticles, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnDeleteAllCategories, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20))
         );
     }// </editor-fold>//GEN-END:initComponents
     
@@ -90,7 +105,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
         try {
             repository.deleteAllArticles();
             loadModel();
-            MessageUtils.showInformationMessage("", "All articles have been successfully deleted!");
+            MessageUtils.showInformationMessage("Delete all articles", "All articles have been successfully deleted!");
         } catch (Exception ex) {
             MessageUtils.showErrorMessage("Unrecoverable error", "Unable to delete articles");
             System.exit(1);
@@ -116,6 +131,17 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
             System.exit(1);
         }
     }//GEN-LAST:event_btnUploadArticlesActionPerformed
+
+    private void btnDeleteAllCategoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteAllCategoriesActionPerformed
+        try {
+            repository.deleteAllCategories();
+            loadModel();
+            MessageUtils.showInformationMessage("Delete all categories", "All categories have been successfully deleted!");
+        } catch (Exception ex) {
+            MessageUtils.showErrorMessage("Unrecoverable error", "Unable to delete categories");
+            System.exit(1);
+        }
+    }//GEN-LAST:event_btnDeleteAllCategoriesActionPerformed
     
     private void init() {
         try {
@@ -139,6 +165,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteAllArticles;
+    private javax.swing.JButton btnDeleteAllCategories;
     private javax.swing.JButton btnUploadArticles;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbRss;

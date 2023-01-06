@@ -5,14 +5,22 @@ GO
 
 -- TABLES --
 
+CREATE TABLE Category
+(
+	IDCategory INT PRIMARY KEY IDENTITY,
+	[Name] NVARCHAR(25) NOT NULL
+)
+GO
+
 CREATE TABLE Article
 (
 	IDArticle INT PRIMARY KEY IDENTITY,
-	Title NVARCHAR(300),
-	Link NVARCHAR(300),
-	[Description] NVARCHAR(900),
-	PicturePath NVARCHAR(90),
-	PublishedDate NVARCHAR(90)
+	Title NVARCHAR(300) NULL,
+	Link NVARCHAR(300) NULL,
+	[Description] NVARCHAR(900) NULL,
+	PicturePath NVARCHAR(90) NULL,
+	PublishedDate NVARCHAR(90) NULL,
+	CategoryID INT FOREIGN KEY REFERENCES [Category](IDCategory) NULL
 )
 GO
 
@@ -32,6 +40,9 @@ CREATE TABLE [User]
 )
 GO
 
+INSERT INTO Category VALUES ('News')
+INSERT INTO Category VALUES ('Politics')
+INSERT INTO Category VALUES ('Gaming')
 INSERT INTO [Role] VALUES ('Administrator')
 INSERT INTO [Role] VALUES ('User')
 INSERT INTO [User] VALUES ('admin', 'admin', 1)
@@ -137,10 +148,11 @@ CREATE PROCEDURE createArticle
 	@Description NVARCHAR(900),
 	@PicturePath NVARCHAR(90),
 	@PublishedDate NVARCHAR(90),
+	@CategoryID INT,
 	@IDArticle INT OUTPUT
 AS 
 BEGIN 
-	INSERT INTO Article VALUES(@Title, @Link, @Description, @PicturePath, @PublishedDate)
+	INSERT INTO Article VALUES(@Title, @Link, @Description, @PicturePath, @PublishedDate, @CategoryID)
 	SET @IDArticle = SCOPE_IDENTITY()
 END
 GO
@@ -151,6 +163,7 @@ CREATE PROCEDURE updateArticle
 	@Description NVARCHAR(900),
 	@PicturePath NVARCHAR(90),
 	@PublishedDate NVARCHAR(90),
+	@CategoryID INT,
 	@IDArticle INT
 	 
 AS 
@@ -160,7 +173,8 @@ BEGIN
 		Link = @Link,
 		[Description] = @Description,
 		PicturePath = @PicturePath,
-		PublishedDate = @PublishedDate		
+		PublishedDate = @PublishedDate,
+		CategoryID = @CategoryID
 	WHERE 
 		IDArticle = @IDArticle
 END
@@ -170,11 +184,8 @@ CREATE PROCEDURE deleteArticle
 	@IDArticle INT	 
 AS 
 BEGIN 
-	DELETE  
-	FROM 
-			Article
-	WHERE 
-		IDArticle = @IDArticle
+	DELETE FROM Article
+	WHERE IDArticle = @IDArticle
 END
 GO
 
@@ -190,12 +201,8 @@ CREATE PROCEDURE selectArticle
 	@IDArticle INT
 AS 
 BEGIN 
-	SELECT 
-		* 
-	FROM 
-		Article
-	WHERE 
-		IDArticle = @IDArticle
+	SELECT * FROM Article
+	WHERE IDArticle = @IDArticle
 END
 GO
 
@@ -203,6 +210,61 @@ CREATE PROCEDURE selectArticles
 AS 
 BEGIN 
 	SELECT * FROM Article
+END
+GO
+
+CREATE PROCEDURE createCategory
+	@Name NVARCHAR(25),
+	@IDCategory INT OUTPUT
+AS
+BEGIN
+	INSERT INTO Category VALUES(@Name)
+	SET @IDCategory = SCOPE_IDENTITY()
+END
+GO
+
+CREATE PROCEDURE updateCategory
+	@Name NVARCHAR(25),
+	@IDCategory INT
+AS 
+BEGIN 
+	UPDATE Category SET 
+		[Name] = @Name		
+	WHERE 
+		IDCategory = @IDCategory
+END
+GO
+
+CREATE PROCEDURE deleteCategory
+	@IDCategory INT	 
+AS 
+BEGIN 
+	DELETE FROM Category
+	WHERE IDCategory = @IDCategory
+END
+GO
+
+CREATE PROCEDURE deleteAllCategories
+AS
+BEGIN
+	DELETE FROM Category
+	DBCC CHECKIDENT ('Category', RESEED, 0)
+END
+GO
+
+CREATE PROCEDURE selectCategory
+	@IDCategory INT
+AS 
+BEGIN 
+	SELECT * FROM Category
+	WHERE IDCategory = @IDCategory
+END
+GO
+
+CREATE PROCEDURE selectCategories
+AS 
+BEGIN 
+	SELECT * FROM Category
 END
 GO
 

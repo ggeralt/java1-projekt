@@ -12,19 +12,21 @@ public class Article {
     private String description;
     private String picturePath;
     private LocalDateTime publishedDate;
+    private Category category;
 
     public Article() {}
     
-    public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate) {
+    public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate, Category category) {
         this.title = title;
         this.link = link;
         this.description = description;
         this.picturePath = picturePath;
         this.publishedDate = publishedDate;
+        this.category = category;
     }
     
-    public Article(int id, String title, String link, String description, String picturePath, LocalDateTime publishedDate) {
-        this(title, link, description, picturePath, publishedDate);
+    public Article(int id, String title, String link, String description, String picturePath, LocalDateTime publishedDate, Category category) {
+        this(title, link, description, picturePath, publishedDate, category);
         this.id = id;
     }
 
@@ -72,6 +74,14 @@ public class Article {
         this.publishedDate = publishedDate;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+    
     @Override
     public String toString() {
         return id + " - " + title;

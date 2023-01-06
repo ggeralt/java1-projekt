@@ -1,6 +1,5 @@
 package hr.algebra.view;
 
-import hr.algebra.MainWindow;
 import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Article;

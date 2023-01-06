@@ -2,6 +2,7 @@ package hr.algebra.dal.sql;
 
 import hr.algebra.dal.Repository;
 import hr.algebra.model.Article;
+import hr.algebra.model.Category;
 import hr.algebra.model.User;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -14,6 +15,9 @@ import java.util.Optional;
 import javax.sql.DataSource;
 
 public class SQLRepository implements Repository {
+    private static final String ID_CATEGORY = "IDCategory";
+    private static final String NAME = "Name";
+    
     private static final String ID_USER = "IDUser";
     private static final String USERNAME = "Username";
     private static final String PASSWORD = "Password";
@@ -26,6 +30,13 @@ public class SQLRepository implements Repository {
     private static final String PICTURE_PATH = "PicturePath";
     private static final String PUBLISHED_DATE = "PublishedDate";
 
+    private static final String CREATE_CATEGORY = "{ CALL createCategory (?,?) }";
+    private static final String UPDATE_CATEGORY = "{ CALL updateCategory (?,?) }";
+    private static final String DELETE_CATEGORY = "{ CALL deleteCategory (?) }";
+    private static final String DELETE_ALL_CATEGORIES = "{ CALL deleteAllCategories }";
+    private static final String SELECT_CATEGORY = "{ CALL selectCategory (?) }";
+    private static final String SELECT_CATEGORIES = "{ CALL selectCategories }";
+    
     private static final String CREATE_USER = "{ CALL createUser (?,?,?,?) }";
     private static final String UPDATE_USER = "{ CALL updateUser (?,?,?,?) }";
     private static final String DELETE_USER_BY_ID = "{ CALL deleteUserByID (?) }";
@@ -111,12 +122,7 @@ public class SQLRepository implements Repository {
 
     @Override
     public void deleteAllArticles() throws Exception {
-        DataSource dataSource = DataSourceSingleton.getInstance();
-        try (Connection con = dataSource.getConnection();
-                CallableStatement stmt = con.prepareCall(DELETE_ALL_ARTICLES)) {
-
-            stmt.executeUpdate();
-        }
+        simpleDatabaseCall(DELETE_ALL_ARTICLES);
     }
     
     @Override
@@ -298,6 +304,97 @@ public class SQLRepository implements Repository {
             stmt.executeUpdate();
             
             return stmt.getInt(2);
+        }
+    }
+
+    @Override
+    public int createCategory(Category category) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(CREATE_CATEGORY)) {
+
+            stmt.setString("@" + NAME, category.getName());
+            stmt.registerOutParameter("@" + ID_CATEGORY, Types.INTEGER);
+
+            stmt.executeUpdate();
+            
+            return stmt.getInt("@" + ID_CATEGORY);
+        }
+    }
+
+    @Override
+    public void updateCategory(int id, Category data) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(UPDATE_CATEGORY)) {
+
+            stmt.setString("@" + NAME, data.getName());
+            stmt.setInt("@" + ID_CATEGORY, id);
+
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void deleteCategory(int id) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(DELETE_CATEGORY)) {
+
+            stmt.setInt("@" + ID_CATEGORY, id);
+
+            stmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void deleteAllCategories() throws Exception {
+        simpleDatabaseCall(DELETE_ALL_CATEGORIES);
+    }
+
+    @Override
+    public Optional<Category> selectCategory(int id) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_CATEGORY)) {
+
+            stmt.setInt("@" + ID_CATEGORY, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(new Category(
+                            rs.getInt(ID_CATEGORY),
+                            rs.getString(NAME)));
+                }
+            }
+        }
+        
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Category> selectCategories() throws Exception {
+        List<Category> categories = new ArrayList<>();
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(SELECT_CATEGORIES);
+                ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                categories.add(new Category(
+                        rs.getInt(ID_CATEGORY),
+                        rs.getString(NAME)));
+            }
+        }
+        
+        return categories;
+    }
+    
+    private void simpleDatabaseCall(String procedureCall) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(procedureCall)) {
+
+            stmt.executeUpdate();
         }
     }
 }

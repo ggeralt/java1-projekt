@@ -1,6 +1,7 @@
 package hr.algebra.dal;
 
 import hr.algebra.model.Article;
+import hr.algebra.model.Category;
 import hr.algebra.model.User;
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +23,12 @@ public interface Repository {
     void deleteAllArticles() throws Exception;
     Optional<Article> selectArticle(int id) throws Exception;
     List<Article> selectArticles() throws Exception;
+    
+    int createCategory(Category category) throws Exception;
+    void updateCategory(int id, Category data) throws Exception;
+    void deleteCategory(int id) throws Exception;
+    void deleteAllCategories() throws Exception;
+    Optional<Category> selectCategory(int id) throws Exception;
+    List<Category> selectCategories() throws Exception;
+    
 }
