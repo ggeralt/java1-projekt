@@ -4,7 +4,6 @@ import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Category;
 import hr.algebra.utils.MessageUtils;
-import hr.algebra.view.model.ArticleTableModel;
 import hr.algebra.view.model.CategoryTableModel;
 import java.util.ArrayList;
 import java.util.List;
