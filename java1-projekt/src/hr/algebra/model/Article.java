@@ -98,13 +98,15 @@ public class Article {
     public String getCategoryName(int categoryId) {
         try {
             Optional<Category> category = repository.selectCategoryByID(categoryId);
-            String categoryName = category.get().getName();
-            return categoryName;
+            if (category.isPresent()) {
+                String categoryName = category.get().getName();
+                return categoryName;
+            }
         } catch (Exception ex) {
             Logger.getLogger(Article.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return "Undefined";
+        return "(Undefined)";
     }
     
     @Override

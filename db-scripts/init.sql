@@ -182,12 +182,21 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE deleteArticle
+CREATE PROCEDURE deleteArticleByID
 	@IDArticle INT	 
 AS 
 BEGIN 
 	DELETE FROM Article
 	WHERE IDArticle = @IDArticle
+END
+GO
+
+CREATE PROCEDURE deleteArticleByCategoryID
+	@CategoryID INT	 
+AS 
+BEGIN 
+	DELETE FROM Article
+	WHERE CategoryID = @CategoryID
 END
 GO
 

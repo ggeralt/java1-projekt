@@ -19,7 +19,8 @@ public interface Repository {
     int createArticle(Article article) throws Exception;
     void createArticles(List<Article> articles) throws Exception;    
     void updateArticle(int id, Article data) throws Exception;
-    void deleteArticle(int id) throws Exception;
+    void deleteArticleByID(int id) throws Exception;
+    void deleteArticleByCategoryID(int categoryId) throws Exception;
     void deleteAllArticles() throws Exception;
     Optional<Article> selectArticle(int id) throws Exception;
     List<Article> selectArticles() throws Exception;

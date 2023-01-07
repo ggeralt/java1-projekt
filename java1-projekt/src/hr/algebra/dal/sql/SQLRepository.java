@@ -50,7 +50,8 @@ public class SQLRepository implements Repository {
     
     private static final String CREATE_ARTICLE = "{ CALL createArticle (?,?,?,?,?,?,?) }";
     private static final String UPDATE_ARTICLE = "{ CALL updateArticle (?,?,?,?,?,?,?) }";
-    private static final String DELETE_ARTICLE = "{ CALL deleteArticle (?) }";
+    private static final String DELETE_ARTICLE_BY_ID = "{ CALL deleteArticleByID (?) }";
+    private static final String DELETE_ARTICLE_BY_CATEGORY_ID = "{ CALL deleteArticleByCategoryID (?) }";
     private static final String DELETE_ALL_ARTICLES = "{ CALL deleteAllArticles }";
     private static final String SELECT_ARTICLE = "{ CALL selectArticle (?) }";
     private static final String SELECT_ARTICLES = "{ CALL selectArticles }";
@@ -114,10 +115,10 @@ public class SQLRepository implements Repository {
     }
 
     @Override
-    public void deleteArticle(int id) throws Exception {
+    public void deleteArticleByID(int id) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
-                CallableStatement stmt = con.prepareCall(DELETE_ARTICLE)) {
+                CallableStatement stmt = con.prepareCall(DELETE_ARTICLE_BY_ID)) {
 
             stmt.setInt("@" + ID_ARTICLE, id);
 
@@ -125,6 +126,18 @@ public class SQLRepository implements Repository {
         }
     }
 
+    @Override
+    public void deleteArticleByCategoryID(int categoryId) throws Exception {
+        DataSource dataSource = DataSourceSingleton.getInstance();
+        try (Connection con = dataSource.getConnection();
+                CallableStatement stmt = con.prepareCall(DELETE_ARTICLE_BY_CATEGORY_ID)) {
+
+            stmt.setInt("@" + CATEGORY_ID, categoryId);
+
+            stmt.executeUpdate();
+        }
+    }
+    
     @Override
     public void deleteAllArticles() throws Exception {
         executeSimpleDatabaseCall(DELETE_ALL_ARTICLES);
@@ -341,7 +354,7 @@ public class SQLRepository implements Repository {
             stmt.executeUpdate();
         }
     }
-
+    
     @Override
     public void deleteCategory(int id) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();

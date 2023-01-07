@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
@@ -210,11 +211,15 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
         }
         else if (tbDeleteSelectedCategory != null) {
             try {
-                repository.deleteCategory(tbDeleteSelectedCategory.getId());
-                MessageUtils.showInformationMessage("Category deletion", "Successfully deleted category: " + tbDeleteSelectedCategory.getName() + " (IDCategory: " + tbDeleteSelectedCategory.getId() + ")");
-                tbDeleteSelectedCategory = null;
-                categoriesTableModel = new CategoryTableModel(repository.selectCategories());
-                tables.forEach(tb -> tb.setModel(categoriesTableModel));
+                int dialogResult = MessageUtils.showConfirmDialog("WARNING", "This action will result in deletion of articles associated with this category.\nDo you want to continue?");
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    repository.deleteArticleByCategoryID(tbDeleteSelectedCategory.getId());
+                    repository.deleteCategory(tbDeleteSelectedCategory.getId());
+                    categoriesTableModel = new CategoryTableModel(repository.selectCategories());
+                    tables.forEach(tb -> tb.setModel(categoriesTableModel)); 
+                    MessageUtils.showInformationMessage("Category deletion", "Successfully deleted category: " + tbDeleteSelectedCategory.getName() + " (IDCategory: " + tbDeleteSelectedCategory.getId() + ") and it's articles.");
+                    tbDeleteSelectedCategory = null;                       
+                }
             } catch (Exception ex) {
                 Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             }

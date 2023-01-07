@@ -357,7 +357,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
                 if (selectedArticle.getPicturePath() != null) {
                     Files.deleteIfExists(Paths.get(selectedArticle.getPicturePath()));
                 }
-                repository.deleteArticle(selectedArticle.getId());
+                repository.deleteArticleByID(selectedArticle.getId());
                 articlesTableModel.setArticles(repository.selectArticles());
 
                 clearForm();
@@ -522,6 +522,11 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
     
     private void initCategories() throws Exception {
         categories = repository.selectCategories();
+        
+        if (cbCategories.getItemCount() != 0) {
+            cbCategories.removeAllItems();
+        }
+        
         categories.forEach((category) -> {
             cbCategories.addItem(new Category(category.getId(), category.getName()));
         });

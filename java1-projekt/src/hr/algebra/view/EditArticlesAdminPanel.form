@@ -42,13 +42,13 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane2" pref="559" max="32767" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="btnUploadArticles" alignment="0" min="-2" pref="54" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" attributes="0">
                       <Component id="btnDeleteAllArticles" min="-2" pref="39" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnDeleteAllCategories" min="-2" pref="39" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="btnUploadArticles" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
           </Group>
