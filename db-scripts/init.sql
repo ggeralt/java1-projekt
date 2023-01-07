@@ -42,6 +42,8 @@ GO
 
 INSERT INTO Category VALUES ('News')
 INSERT INTO Category VALUES ('Politics')
+INSERT INTO Category VALUES ('Sports')
+INSERT INTO Category VALUES ('Music')
 INSERT INTO Category VALUES ('Gaming')
 INSERT INTO [Role] VALUES ('Administrator')
 INSERT INTO [Role] VALUES ('User')

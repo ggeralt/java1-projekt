@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 public class ArticleTableModel extends AbstractTableModel {
-    private static final String[] COLUMN_NAMES = {"ID", "Title", "Link", "Description", "Picture path", "Published date", "CategoryID"};
+    private static final String[] COLUMN_NAMES = {"ID", "Category", "Title", "Link", "Description", "Picture path", "Published date"};
     
     private List<Article> articles;
 
@@ -25,7 +25,7 @@ public class ArticleTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return Article.class.getDeclaredFields().length - 1;
+        return Article.class.getDeclaredFields().length - 2;
     }
 
     @Override
@@ -34,17 +34,17 @@ public class ArticleTableModel extends AbstractTableModel {
             case 0:
                 return articles.get(rowIndex).getId();
             case 1:
-                return articles.get(rowIndex).getTitle();
+                return articles.get(rowIndex).getCategoryName(articles.get(rowIndex).getCategoryId());
             case 2:
-                return articles.get(rowIndex).getLink();
+                return articles.get(rowIndex).getTitle();
             case 3:
-                return articles.get(rowIndex).getDescription();
+                return articles.get(rowIndex).getLink();
             case 4:
-                return articles.get(rowIndex).getPicturePath();
+                return articles.get(rowIndex).getDescription();
             case 5:
-                return articles.get(rowIndex).getPublishedDate().format(Article.DATE_FORMATTER);
+                return articles.get(rowIndex).getPicturePath();
             case 6:
-                return articles.get(rowIndex).getCategoryId();
+                return articles.get(rowIndex).getPublishedDate().format(Article.DATE_FORMATTER);
             default:
                 throw new RuntimeException("No such column");
         }

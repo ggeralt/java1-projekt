@@ -143,8 +143,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
             loadModel();
             MessageUtils.showInformationMessage("Delete all categories", "All categories have been successfully deleted!");
         } catch (Exception ex) {
-            MessageUtils.showErrorMessage("Unrecoverable error", "Unable to delete categories");
-            System.exit(1);
+            MessageUtils.showErrorMessage("Categories deletion error", "Unable to delete categories, most likely because there are articles stored in the database.\nIf you wish to delete all categories, first you must delete all articles.");
         }
     }//GEN-LAST:event_btnDeleteAllCategoriesActionPerformed
     

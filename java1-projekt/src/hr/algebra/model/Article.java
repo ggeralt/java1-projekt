@@ -1,7 +1,12 @@
 package hr.algebra.model;
 
+import hr.algebra.dal.Repository;
+import hr.algebra.dal.RepositoryFactory;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Article { 
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
@@ -14,22 +19,17 @@ public class Article {
     private LocalDateTime publishedDate;
     private int categoryId;
 
+    private Repository repository;
+    
     public Article() {}
     
-    /*public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate) {
-        this.title = title;
-        this.link = link;
-        this.description = description;
-        this.picturePath = picturePath;
-        this.publishedDate = publishedDate;
-    }
-    
-    public Article(int id, String title, String link, String description, String picturePath, LocalDateTime publishedDate) {
-        this(title, link, description, picturePath, publishedDate);
-        this.id = id;
-    }*/
-    
     public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate, int categoryId) {
+        try {
+            repository = RepositoryFactory.getRepository();
+        } catch (Exception ex) {
+            Logger.getLogger(Article.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         this.title = title;
         this.link = link;
         this.description = description;
@@ -93,6 +93,18 @@ public class Article {
 
     public void setCategoryId(Category category) {
         this.categoryId = category.getId();
+    }
+    
+    public String getCategoryName(int categoryId) {
+        try {
+            Optional<Category> category = repository.selectCategoryByID(categoryId);
+            String categoryName = category.get().getName();
+            return categoryName;
+        } catch (Exception ex) {
+            Logger.getLogger(Article.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return "Undefined";
     }
     
     @Override

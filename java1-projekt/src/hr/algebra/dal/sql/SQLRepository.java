@@ -48,8 +48,8 @@ public class SQLRepository implements Repository {
     private static final String SELECT_USERS = "{ CALL selectUsers }";
     private static final String CHECK_IF_USER_EXISTS = "{ CALL checkIfUserExists (?,?) }";
     
-    private static final String CREATE_ARTICLE = "{ CALL createArticle (?,?,?,?,?,?) }";
-    private static final String UPDATE_ARTICLE = "{ CALL updateArticle (?,?,?,?,?,?) }";
+    private static final String CREATE_ARTICLE = "{ CALL createArticle (?,?,?,?,?,?,?) }";
+    private static final String UPDATE_ARTICLE = "{ CALL updateArticle (?,?,?,?,?,?,?) }";
     private static final String DELETE_ARTICLE = "{ CALL deleteArticle (?) }";
     private static final String DELETE_ALL_ARTICLES = "{ CALL deleteAllArticles }";
     private static final String SELECT_ARTICLE = "{ CALL selectArticle (?) }";
@@ -127,7 +127,7 @@ public class SQLRepository implements Repository {
 
     @Override
     public void deleteAllArticles() throws Exception {
-        simpleDatabaseCall(DELETE_ALL_ARTICLES);
+        executeSimpleDatabaseCall(DELETE_ALL_ARTICLES);
     }
     
     @Override
@@ -356,7 +356,7 @@ public class SQLRepository implements Repository {
 
     @Override
     public void deleteAllCategories() throws Exception {
-        simpleDatabaseCall(DELETE_ALL_CATEGORIES);
+        executeSimpleDatabaseCall(DELETE_ALL_CATEGORIES);
     }
 
     @Override
@@ -420,7 +420,7 @@ public class SQLRepository implements Repository {
         return categories;
     }
     
-    private void simpleDatabaseCall(String procedureCall) throws Exception {
+    private void executeSimpleDatabaseCall(String procedureCall) throws Exception {
         DataSource dataSource = DataSourceSingleton.getInstance();
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(procedureCall)) {
