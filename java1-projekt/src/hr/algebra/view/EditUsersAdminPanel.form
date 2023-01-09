@@ -224,9 +224,6 @@
           <Font name="Tahoma" size="18" style="0"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfCreateUsernameKeyReleased"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="tfCreatePassword">
       <Properties>
@@ -234,9 +231,6 @@
           <Font name="Tahoma" size="18" style="0"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfCreatePasswordKeyReleased"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -292,9 +286,6 @@
           <Font name="Tahoma" size="18" style="0"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfUpdateUsernameKeyReleased"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JPasswordField" name="tfUpdatePassword">
       <Properties>
@@ -302,9 +293,6 @@
           <Font name="Tahoma" size="18" style="0"/>
         </Property>
       </Properties>
-      <Events>
-        <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tfUpdatePasswordKeyReleased"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnUpdateUser">
       <Properties>

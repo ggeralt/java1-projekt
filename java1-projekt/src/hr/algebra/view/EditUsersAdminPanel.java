@@ -1,5 +1,6 @@
 package hr.algebra.view;
 
+import hr.algebra.MainWindow;
 import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.User;
@@ -10,13 +11,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 public class EditUsersAdminPanel extends javax.swing.JPanel {
-    private boolean usernameNotEmpty;
-    private boolean passwordNotEmpty;
+
     private Repository repository;
     private UserTableModel usersTableModel;
     private User tbDeleteSelectedUser;
@@ -105,18 +104,8 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
         jLabel4.setText("Password:");
 
         tfCreateUsername.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfCreateUsername.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tfCreateUsernameKeyReleased(evt);
-            }
-        });
 
         tfCreatePassword.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfCreatePassword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tfCreatePasswordKeyReleased(evt);
-            }
-        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel5.setText("Create user");
@@ -146,18 +135,8 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
         jLabel7.setText("Password:");
 
         tfUpdateUsername.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfUpdateUsername.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tfUpdateUsernameKeyReleased(evt);
-            }
-        });
 
         tfUpdatePassword.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        tfUpdatePassword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tfUpdatePasswordKeyReleased(evt);
-            }
-        });
 
         btnUpdateUser.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         btnUpdateUser.setText("UPDATE");
@@ -261,10 +240,14 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteUserActionPerformed
-        if ("Administrator".equals(tbDeleteSelectedUser.getRole())) {
-            MessageUtils.showInformationMessage("User deletion not allowed", "Deleting user with role 'Administrator' is not allowed by this means.");
+        if (tbDeleteSelectedUser == null) {
+            MessageUtils.showInformationMessage("User deletion not possible", "Please select a user from the table.");
         }
-        else if (!"Administrator".equals(tbDeleteSelectedUser.getRole())) {
+        else if (tbDeleteSelectedUser != null && "Administrator".equals(tbDeleteSelectedUser.getRole())) {
+            MessageUtils.showInformationMessage("User deletion not allowed", "Deleting user with role 'Administrator' is not allowed by this means.");
+            tbDeleteSelectedUser = null;
+        }
+        else if (tbDeleteSelectedUser != null && !"Administrator".equals(tbDeleteSelectedUser.getRole())) {
             try {
                 repository.deleteUserByID(tbDeleteSelectedUser.getId());
                 MessageUtils.showInformationMessage("User deletion", "Successfully deleted user: " + tbDeleteSelectedUser.getUsername() + " (IDUser: " + tbDeleteSelectedUser.getId() + ")");
@@ -282,6 +265,11 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
             String username = tfCreateUsername.getText().trim();
             String password = tfCreatePassword.getText();
             Optional<User> userLog = repository.selectUserByUsername(username);
+            
+            if ("".equals(username) || "".equals(password)) {
+                MessageUtils.showErrorMessage("Empty credentials", "Cannot create user with empty credentials.");
+                return;
+            }
             
             if (userLog.isPresent()) {
                 MessageUtils.showErrorMessage("User already exists", "Please try using a different name.");
@@ -301,14 +289,12 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
 
     private void tbDeleteUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbDeleteUsersMouseClicked
         tbDeleteSelectedUser = getSelectedUserFromTable(tbDeleteUsers);
-        btnDeleteUser.setEnabled(true);
     }//GEN-LAST:event_tbDeleteUsersMouseClicked
 
     private void tbUpdateUsersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbUpdateUsersMouseClicked
         tbUpdateSelectedUser = getSelectedUserFromTable(tbUpdateUsers);
         tfUpdateUsername.setText(tbUpdateSelectedUser.getUsername());
         tfUpdatePassword.setText(tbUpdateSelectedUser.getPassword());
-        btnUpdateUser.setEnabled(true);
     }//GEN-LAST:event_tbUpdateUsersMouseClicked
 
     private void btnUpdateUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateUserActionPerformed
@@ -316,11 +302,11 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
             String username = tfUpdateUsername.getText().trim();
             String password = tfUpdatePassword.getText();
         
-            if (tbUpdateSelectedUser.getUsername().equals(username) && tbUpdateSelectedUser.getPassword().equals(password)) {
-                MessageUtils.showInformationMessage("Same credentials", "Cannot update user with same credentials.");
+            if (tbUpdateSelectedUser == null) {
+                MessageUtils.showInformationMessage("User update not possible", "Please select a user from the table.");
                 return;
             }
-            
+        
             if ("".equals(username) || "".equals(password)) {
                 MessageUtils.showErrorMessage("Empty credentials", "Cannot update user with empty credentials.");
                 return;
@@ -343,35 +329,6 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnUpdateUserActionPerformed
 
-    private void tfCreateUsernameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCreateUsernameKeyReleased
-        usernameNotEmpty = !"".equals(tfCreateUsername.getText().trim());
-        setBtnEnabled(btnCreateUser, usernameNotEmpty, passwordNotEmpty);
-    }//GEN-LAST:event_tfCreateUsernameKeyReleased
-
-    private void tfCreatePasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfCreatePasswordKeyReleased
-        passwordNotEmpty = !"".equals(tfCreatePassword.getText());
-        setBtnEnabled(btnCreateUser, usernameNotEmpty, passwordNotEmpty);
-    }//GEN-LAST:event_tfCreatePasswordKeyReleased
-
-    private void tfUpdateUsernameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfUpdateUsernameKeyReleased
-        usernameNotEmpty = !"".equals(tfUpdateUsername.getText().trim());
-        setBtnEnabled(btnUpdateUser, usernameNotEmpty, passwordNotEmpty);
-    }//GEN-LAST:event_tfUpdateUsernameKeyReleased
-
-    private void tfUpdatePasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfUpdatePasswordKeyReleased
-        passwordNotEmpty = !"".equals(tfUpdatePassword.getText());
-        setBtnEnabled(btnUpdateUser, usernameNotEmpty, passwordNotEmpty);
-    }//GEN-LAST:event_tfUpdatePasswordKeyReleased
-
-    private void setBtnEnabled(JButton button, boolean usernameNotEmpty, boolean passwordNotEmpty) {
-        if (usernameNotEmpty && passwordNotEmpty) {
-            button.setEnabled(true);
-        }
-        else {
-            button.setEnabled(false);
-        }
-    }
-    
     public User getSelectedUserFromTable(JTable table) {
         int selectedRow = table.getSelectedRow();
         int rowIndex = table.convertRowIndexToModel(selectedRow);
@@ -409,10 +366,6 @@ public class EditUsersAdminPanel extends javax.swing.JPanel {
         try {
             initRepository();
             initTables();
-            
-            btnUpdateUser.setEnabled(false);
-            btnCreateUser.setEnabled(false);
-            btnDeleteUser.setEnabled(false);
         } catch (Exception ex) {
             Logger.getLogger(EditUsersAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
