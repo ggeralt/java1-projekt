@@ -108,18 +108,18 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
         try {
             repository.deleteAllArticles();
             loadModel();
-            MessageUtils.showInformationMessage("Delete all articles", "All articles have been successfully deleted!");
+            MessageUtils.showInformationMessage("Delete all articles", "All articles have been successfully deleted.");
         } catch (Exception ex) {
-            MessageUtils.showErrorMessage("Unrecoverable error", "Unable to delete articles");
-            System.exit(1);
+            Logger.getLogger(EditArticlesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Article Deletion Error", "Unable to delete articles.");
         }
 
         try {
             File directory = new File(ASSETS);
             FileUtils.cleanDirectory(directory);
         } catch (IOException ex) {
-            MessageUtils.showErrorMessage("Unrecoverable error", "Unable to delete images");
-            System.exit(1);
+            Logger.getLogger(EditArticlesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Image Deletion Error", "Unable to delete images.");
         }
     }//GEN-LAST:event_btnDeleteAllArticlesActionPerformed
 
@@ -132,8 +132,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
             MessageUtils.showInformationMessage("Article upload", "Articles successfully uploaded.");
         } catch (Exception ex) {
             Logger.getLogger(EditArticlesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-            MessageUtils.showErrorMessage("Unrecoverable error", "Unable to upload articles");
-            System.exit(1);
+            MessageUtils.showErrorMessage("Article Upload Error", "Unable to upload articles.");
         }
     }//GEN-LAST:event_btnUploadArticlesActionPerformed
 
@@ -141,9 +140,10 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
         try {
             repository.deleteAllCategories();
             loadModel();
-            MessageUtils.showInformationMessage("Delete all categories", "All categories have been successfully deleted!");
+            MessageUtils.showInformationMessage("Delete all categories", "All categories have been successfully deleted.");
         } catch (Exception ex) {
-            MessageUtils.showErrorMessage("Categories deletion error", "Unable to delete categories, most likely because there are articles stored in the database.\nIf you wish to delete all categories, first you must delete all articles.");
+            Logger.getLogger(EditArticlesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Categories Deletion Error", "Unable to delete categories, most likely because there are articles stored in the database.\nIf you wish to delete all categories, first you must delete all articles.");
         }
     }//GEN-LAST:event_btnDeleteAllCategoriesActionPerformed
     
@@ -156,7 +156,7 @@ public class EditArticlesAdminPanel extends javax.swing.JPanel {
             lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());
         } catch (Exception ex) {
             Logger.getLogger(EditArticlesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-            MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
+            MessageUtils.showErrorMessage("Unrecoverable Error", "Cannot initiate the form.");
             System.exit(1);
         }
     }

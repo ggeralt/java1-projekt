@@ -295,7 +295,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
                 clearForm();
             } catch (Exception ex) {
                 Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
-                MessageUtils.showErrorMessage("Error", "Unable to create article!");
+                MessageUtils.showErrorMessage("Article Creation Error", "Unable to create article.");
             }
         }
     }//GEN-LAST:event_btnAddActionPerformed
@@ -339,7 +339,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
                 MessageUtils.showInformationMessage("Article update", "Article successfully updated.");
             } catch (Exception ex) {
                 Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
-                MessageUtils.showErrorMessage("Article Update Error", "Unable to update article!");
+                MessageUtils.showErrorMessage("Article Update Error", "Unable to update article.");
             }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
@@ -363,7 +363,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
                 clearForm();
             } catch (Exception ex) {
                 Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
-                MessageUtils.showErrorMessage("Error", "Unable to delete article!");
+                MessageUtils.showErrorMessage("Article Deletion Error", "Unable to delete article.");
             }
         }
     }//GEN-LAST:event_btnDeleteActionPerformed

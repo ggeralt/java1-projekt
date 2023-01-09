@@ -67,7 +67,7 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
             lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());
         } catch (Exception ex) {
             Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
-            MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
+            MessageUtils.showErrorMessage("Unrecoverable Error", "Cannot initiate the form.");
             System.exit(1);
         }
     }

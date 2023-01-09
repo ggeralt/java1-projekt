@@ -62,14 +62,14 @@ public class FileUtils {
     }
     
     public static void cleanDirectory(File directory) throws IOException {
-      File filesList[] = directory.listFiles();
-      for(File file : filesList) {
-         if(file.isFile()) {
-            file.delete();
-         } else {
-            cleanDirectory(file);
-         }
-      }
+        File filesList[] = directory.listFiles();
+        for(File file : filesList) {
+            if(file.isFile()) {
+                file.delete();
+            } 
+            else {
+                cleanDirectory(file);
+            }
+        }
     }
-    
 }

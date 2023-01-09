@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
-public class EditCategoriesUserPanel extends javax.swing.JPanel {
+public class EditCategoriesAdminPanel extends javax.swing.JPanel {
 
     private Repository repository;
     private CategoryTableModel categoriesTableModel;
@@ -22,7 +22,7 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
     private Category tbUpdateSelectedCategory;
     private final List<JTable> tables = new ArrayList<>();
     
-    public EditCategoriesUserPanel() {
+    public EditCategoriesAdminPanel() {
         initComponents();
     }
 
@@ -154,10 +154,10 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
                                 .addComponent(tfCreateCategory, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(28, 28, 28)))
+                        .addGap(30, 30, 30)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
@@ -216,11 +216,11 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
                     repository.deleteCategory(tbDeleteSelectedCategory.getId());
                     categoriesTableModel = new CategoryTableModel(repository.selectCategories());
                     tables.forEach(tb -> tb.setModel(categoriesTableModel)); 
-                    MessageUtils.showInformationMessage("Category deletion", "Successfully deleted category: " + tbDeleteSelectedCategory.getName() + " (IDCategory: " + tbDeleteSelectedCategory.getId() + ") and it's articles.");
                     tbDeleteSelectedCategory = null;                       
                 }
             } catch (Exception ex) {
-                Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EditCategoriesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                MessageUtils.showErrorMessage("Category Deletion Error", "Unable to delete category.");
             }
         }
     }//GEN-LAST:event_btnDeleteCategoryActionPerformed
@@ -244,9 +244,9 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
             categoriesTableModel = new CategoryTableModel(repository.selectCategories());
             tables.forEach(tb -> tb.setModel(categoriesTableModel));
             tfCreateCategory.setText("");
-            MessageUtils.showInformationMessage("Category created", "Category '" + name + "' successfully created!");
         } catch (Exception ex) {
-            Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditCategoriesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Category Creation Error", "Unable to create category.");
         }
     }//GEN-LAST:event_btnCreateCategoryActionPerformed
 
@@ -281,9 +281,8 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
             
             categoriesTableModel.setCategories(repository.selectCategories());
             tables.forEach(tb -> tb.setModel(categoriesTableModel));
-            MessageUtils.showInformationMessage("Category update", "Selected category successfully updated.");
         } catch (Exception ex) {
-            Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditCategoriesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Category Update Error", "Unable to update category.");
         }
     }//GEN-LAST:event_btnUpdateCategoryActionPerformed
@@ -299,7 +298,7 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
                 return optCategory.get();
             }
         } catch (Exception ex) {
-            Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditCategoriesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Error", "Unable to show article!");
         }
         
@@ -326,7 +325,7 @@ public class EditCategoriesUserPanel extends javax.swing.JPanel {
             initRepository();
             initTables();
         } catch (Exception ex) {
-            Logger.getLogger(EditCategoriesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EditCategoriesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
             System.exit(1);
         }

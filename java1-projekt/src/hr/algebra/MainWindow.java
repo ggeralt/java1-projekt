@@ -5,7 +5,7 @@ import hr.algebra.utils.MessageUtils;
 import hr.algebra.view.EditArticlesAdminPanel;
 import hr.algebra.view.EditUsersAdminPanel;
 import hr.algebra.view.EditArticlesUserPanel;
-import hr.algebra.view.EditCategoriesUserPanel;
+import hr.algebra.view.EditCategoriesAdminPanel;
 import hr.algebra.view.ViewArticlesUserPanel;
 import java.util.Arrays;
 import java.util.Optional;
@@ -21,9 +21,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MainWindow extends javax.swing.JFrame {
     private static final String VIEW_ARTICLES = "View articles";
     private static final String EDIT_ARTICLES = "Edit articles";
-    private static final String EDIT_CATEGORIES = "Edit categories";
     private static final String ARTICLE = "Article";
     private static final String USER = "User";
+    private static final String CATEGORIES = "Categories";
     private static final String DEFAULT_THEME = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
 
     public MainWindow(Optional<User> user) {
@@ -227,11 +227,11 @@ public class MainWindow extends javax.swing.JFrame {
         if (user.get().getRoleID() == 1) {
             tpContent.add(ARTICLE, new EditArticlesAdminPanel());
             tpContent.add(USER, new EditUsersAdminPanel());
+            tpContent.add(CATEGORIES, new EditCategoriesAdminPanel());
         }
         else {
             tpContent.add(VIEW_ARTICLES, new ViewArticlesUserPanel());
             tpContent.add(EDIT_ARTICLES, new EditArticlesUserPanel());
-            tpContent.add(EDIT_CATEGORIES, new EditCategoriesUserPanel());
         }
     }
     
