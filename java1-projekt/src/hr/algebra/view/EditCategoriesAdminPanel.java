@@ -281,6 +281,8 @@ public class EditCategoriesAdminPanel extends javax.swing.JPanel {
             
             categoriesTableModel.setCategories(repository.selectCategories());
             tables.forEach(tb -> tb.setModel(categoriesTableModel));
+            tbUpdateSelectedCategory = null;
+            tfUpdateCategory.setText("");
         } catch (Exception ex) {
             Logger.getLogger(EditCategoriesAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Category Update Error", "Unable to update category.");

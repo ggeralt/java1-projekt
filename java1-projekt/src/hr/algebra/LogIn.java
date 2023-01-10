@@ -238,5 +238,4 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JPasswordField tfPassword;
     private javax.swing.JTextField tfUsername;
     // End of variables declaration//GEN-END:variables
-
 }

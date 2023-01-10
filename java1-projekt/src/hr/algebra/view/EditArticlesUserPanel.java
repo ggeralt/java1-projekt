@@ -27,17 +27,14 @@ import javax.swing.ListSelectionModel;
 import javax.swing.text.JTextComponent;
 
 public class EditArticlesUserPanel extends javax.swing.JPanel {
-    private List<JTextComponent> validationFields;
-    private List<JLabel> errorLabels;
-
     private static final String DIR = "assets";
-
+    private Article selectedArticle;
     private Repository repository;
     private ArticleTableModel articlesTableModel;
     private CategoryTableModel categoriesTableModel;
-
-    private Article selectedArticle;
     private List<Category> categories;
+    private List<JTextComponent> validationFields;
+    private List<JLabel> errorLabels;
     
     public EditArticlesUserPanel() {
         initComponents();
