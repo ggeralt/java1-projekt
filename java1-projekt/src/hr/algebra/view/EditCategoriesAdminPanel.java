@@ -349,5 +349,4 @@ public class EditCategoriesAdminPanel extends javax.swing.JPanel {
     private javax.swing.JTextField tfCreateCategory;
     private javax.swing.JTextField tfUpdateCategory;
     // End of variables declaration//GEN-END:variables
-
 }
