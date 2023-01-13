@@ -15,9 +15,7 @@ import javax.xml.stream.XMLStreamException;
  * @author dnlbe
  */
 public class ParserFactory {
-
-    private ParserFactory() {
-    }
+    private ParserFactory() {}
 
     public static XMLEventReader createStaxParser(InputStream stream) throws XMLStreamException {
         XMLInputFactory factory = XMLInputFactory.newInstance();

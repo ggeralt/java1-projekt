@@ -394,7 +394,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
             }
         } catch (Exception ex) {
             Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
-            MessageUtils.showErrorMessage("Error", "Unable to show article!");
+            MessageUtils.showErrorMessage("Show Article Error", "Unable to show article.");
         }
     }
 
@@ -441,7 +441,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
             initTable();
         } catch (Exception ex) {
             Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
-            MessageUtils.showErrorMessage("Unrecoverable error", "Cannot initiate the form");
+            MessageUtils.showErrorMessage("Form Init Error", "Cannot initiate the form.");
             System.exit(1);
         }
     }
@@ -474,7 +474,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
         taDescription.setText(article.getDescription());
         tfPublishedDate.setText(article.getPublishedDate().format(Article.DATE_FORMATTER));
         try {
-            cbCategories.setSelectedIndex(article.getCategoryId() - 1); // very bad solution
+            cbCategories.setSelectedIndex(article.getCategoryId() - 1);
         } catch (Exception ex) {
             Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -485,7 +485,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
             label.setIcon(IconUtils.createIcon(file, label.getWidth(), label.getHeight()));
         } catch (IOException ex) {
             Logger.getLogger(EditArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
-            MessageUtils.showErrorMessage("Error", "Unable to set icon!");
+            MessageUtils.showErrorMessage("Set Icon Error", "Unable to set icon.");
         }
     }
 

@@ -24,7 +24,6 @@ import javax.swing.filechooser.FileSystemView;
  * @author dnlbe
  */
 public class FileUtils {
-
     private static final String UPLOAD = "Upload";
 
     public static File uploadFile(String description, String... extensions) {

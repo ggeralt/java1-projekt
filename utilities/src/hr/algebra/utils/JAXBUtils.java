@@ -16,6 +16,7 @@ import javax.xml.bind.Unmarshaller;
  * @author dnlbe
  */
 public class JAXBUtils {
+    private JAXBUtils() {}
     
     public static void save(Object object, String filename) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(object.getClass());
@@ -29,5 +30,4 @@ public class JAXBUtils {
         Unmarshaller unmarshaller = context.createUnmarshaller();
         return unmarshaller.unmarshal(new File(filename));
     }
-    
 }

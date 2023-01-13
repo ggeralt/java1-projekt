@@ -1,35 +1,37 @@
 package hr.algebra.model;
 
-import hr.algebra.dal.Repository;
-import hr.algebra.dal.RepositoryFactory;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Article { 
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
+    @XmlAttribute
     private int id;
+    
     private String title;
     private String link;
     private String description;
+    
+    @XmlElement(name = "picturepath")
     private String picturePath;
+    
+    @XmlJavaTypeAdapter(DateAdapter.class)
+    @XmlElement(name = "publisheddate")
     private LocalDateTime publishedDate;
+    
+    @XmlElement(name = "categoryid")
     private int categoryId;
-
-    private Repository repository;
     
     public Article() {}
     
     public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate, int categoryId) {
-        try {
-            repository = RepositoryFactory.getRepository();
-        } catch (Exception ex) {
-            Logger.getLogger(Article.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
         this.title = title;
         this.link = link;
         this.description = description;
@@ -96,17 +98,7 @@ public class Article {
     }
     
     public String getCategoryName(int categoryId) {
-        try {
-            Optional<Category> category = repository.selectCategoryByID(categoryId);
-            if (category.isPresent()) {
-                String categoryName = category.get().getName();
-                return categoryName;
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(Article.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return "(Undefined)";
+        return "N/A";
     }
     
     @Override

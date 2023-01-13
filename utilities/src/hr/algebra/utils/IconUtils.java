@@ -17,11 +17,9 @@ import javax.swing.ImageIcon;
  * @author dnlbe
  */
 public class IconUtils {
-    
     public static ImageIcon createIcon(File file, int width, int height) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(file);
         Image image = bufferedImage.getScaledInstance(width, height,Image.SCALE_SMOOTH);
         return new ImageIcon(image);
-    }
-    
+    }   
 }

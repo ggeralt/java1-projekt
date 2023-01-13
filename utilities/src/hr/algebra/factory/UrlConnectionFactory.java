@@ -15,14 +15,12 @@ import java.net.URL;
  * @author dnlbe
  */
 public class UrlConnectionFactory {
-
     private static final int TIMEOUT = 10000;
     private static final String REQUEST_METHOD = "GET";
     private static final String USER_AGENT = "User-Agent";
     private static final String MOZILLA = "Mozilla/5.0";
 
-    private UrlConnectionFactory() {
-    }
+    private UrlConnectionFactory() {}
 
     public static HttpURLConnection getHttpUrlConnection(String path) throws MalformedURLException, IOException {
         URL url = new URL(path);
