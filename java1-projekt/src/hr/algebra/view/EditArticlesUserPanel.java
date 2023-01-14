@@ -8,7 +8,6 @@ import hr.algebra.view.model.ArticleTableModel;
 import hr.algebra.utils.FileUtils;
 import hr.algebra.utils.IconUtils;
 import hr.algebra.utils.MessageUtils;
-import hr.algebra.view.model.CategoryTableModel;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,8 +30,6 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
     private Article selectedArticle;
     private Repository repository;
     private ArticleTableModel articlesTableModel;
-    private CategoryTableModel categoriesTableModel;
-    private List<Category> categories;
     private List<JTextComponent> validationFields;
     private List<JLabel> errorLabels;
     
@@ -518,7 +515,7 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
     }
     
     private void initCategories() throws Exception {
-        categories = repository.selectCategories();
+        List<Category> categories = repository.selectCategories();
         
         if (cbCategories.getItemCount() != 0) {
             cbCategories.removeAllItems();

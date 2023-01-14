@@ -22,10 +22,11 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.UnmarshalException;
 
 public class ViewArticlesUserPanel extends javax.swing.JPanel {
     private static final String XML_FILE = "article_archive.xml";
-    private final List<Article> articlesForXML = new ArrayList<>();
+    private List<Article> articlesXML = new ArrayList<>();
     private Article selectedArticle;
     private DefaultListModel<Article> articlesModel;
     private Repository repository;
@@ -43,8 +44,15 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
         lsArticles = new javax.swing.JList<>();
         lbRss = new javax.swing.JLabel();
         btnSaveToXML = new javax.swing.JButton();
-        btnRefresh = new javax.swing.JButton();
+        btnLoadFromXML = new javax.swing.JButton();
         lbIcon = new javax.swing.JLabel();
+        btnLoadFromDatabase = new javax.swing.JButton();
+
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         lsArticles.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -68,16 +76,24 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
             }
         });
 
-        btnRefresh.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        btnRefresh.setText("REFRESH");
-        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+        btnLoadFromXML.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnLoadFromXML.setText("LOAD FROM XML");
+        btnLoadFromXML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRefreshActionPerformed(evt);
+                btnLoadFromXMLActionPerformed(evt);
             }
         });
 
         lbIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/assets/no_image.png"))); // NOI18N
         lbIcon.setPreferredSize(new java.awt.Dimension(480, 300));
+
+        btnLoadFromDatabase.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnLoadFromDatabase.setText("LOAD FROM DATABASE");
+        btnLoadFromDatabase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadFromDatabaseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -91,7 +107,9 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSaveToXML)
                         .addGap(18, 18, 18)
-                        .addComponent(btnRefresh)
+                        .addComponent(btnLoadFromXML)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnLoadFromDatabase)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -111,30 +129,22 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveToXML)
-                    .addComponent(btnRefresh))
+                    .addComponent(btnLoadFromXML)
+                    .addComponent(btnLoadFromDatabase))
                 .addGap(38, 38, 38))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        try {
-            loadModel();
-        } catch (Exception ex) {
-            Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
-            MessageUtils.showErrorMessage("Articles Refresh Error", "Cannot refresh articles list.");
-        }
-    }//GEN-LAST:event_btnRefreshActionPerformed
+    private void btnLoadFromXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadFromXMLActionPerformed
+        loadModelFromXML();
+    }//GEN-LAST:event_btnLoadFromXMLActionPerformed
 
     private void lsArticlesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lsArticlesMouseClicked
-        if (lsArticles.getModel().getSize() != 0) {
-            showArticle();
-        }        
+        showArticle();       
     }//GEN-LAST:event_lsArticlesMouseClicked
 
     private void lsArticlesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lsArticlesKeyReleased
-        if (lsArticles.getModel().getSize() != 0) {
-            showArticle();
-        } 
+        showArticle(); 
     }//GEN-LAST:event_lsArticlesKeyReleased
 
     private void btnSaveToXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveToXMLActionPerformed
@@ -144,7 +154,7 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
             try {
                 Optional<Article> optArticle = repository.selectArticle(articleId);
                 
-                Article _article = new Article(
+                articlesXML.add(new Article(
                         articleId,
                         optArticle.get().getCategoryId(),
                         optArticle.get().getTitle(), 
@@ -152,26 +162,33 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
                         optArticle.get().getDescription(), 
                         optArticle.get().getPicturePath(), 
                         optArticle.get().getPublishedDate()
-                );
-                
-                articlesForXML.add(_article);
+                ));
             } catch (Exception ex) {
                 Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
         try {
-            JAXBUtils.save(new ArticleArchive(articlesForXML), XML_FILE);
-            showInformationMessage("XML File Saved", "Articles are successfully saved into '" + XML_FILE + "' file.");
+            JAXBUtils.save(new ArticleArchive(articlesXML), XML_FILE);
+            showInformationMessage("XML File Saved", "Articles are successfully saved into " + XML_FILE);
         } catch (JAXBException ex) {
             Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSaveToXMLActionPerformed
 
+    private void btnLoadFromDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadFromDatabaseActionPerformed
+        loadModelFromDatabase();
+    }//GEN-LAST:event_btnLoadFromDatabaseActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        loadModelFromDatabase();
+    }//GEN-LAST:event_formComponentShown
+
     public void showArticle() {
-        clearForm();
-        selectedArticle = lsArticles.getSelectedValue();
-        fillIcon(selectedArticle);
+        if (lsArticles.getModel().getSize() != 0) {
+            selectedArticle = lsArticles.getSelectedValue();
+            fillIcon(selectedArticle);
+        }
     }
     
     private void fillIcon(Article article) {
@@ -195,7 +212,8 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnLoadFromDatabase;
+    private javax.swing.JButton btnLoadFromXML;
     private javax.swing.JButton btnSaveToXML;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbIcon;
@@ -207,8 +225,7 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
         try {
             repository = RepositoryFactory.getRepository();
             articlesModel = new DefaultListModel<>();
-            loadModel();
-            lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());
+            loadModelFromDatabase();
         } catch (Exception ex) {
             Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Form Init Error", "Cannot initiate the form.");
@@ -216,10 +233,36 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
         }
     }
 
-    private void loadModel() throws Exception {
-        List<Article> articles = repository.selectArticles();
-        articlesModel.clear();
-        articles.forEach(articlesModel::addElement);
-        lsArticles.setModel(articlesModel);
+    private void loadModelFromDatabase() {
+        try {
+            List<Article> articlesDatabase = repository.selectArticles();
+            articlesModel.clear();
+            articlesDatabase.forEach(articlesModel::addElement);
+            lsArticles.setModel(articlesModel);
+            clearForm();
+            lbRss.setText("Current RSS feed: " + ArticleParser.getRSS_URL());
+        } catch (Exception ex) {
+            Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Load From Database Error", "Cannot load articles from database.");
+        }
+    }
+    
+    private void loadModelFromXML() {
+        try {
+            ArticleArchive articleArchive = (ArticleArchive) JAXBUtils.load(ArticleArchive.class, XML_FILE);
+            articlesModel.clear();
+            articlesXML = articleArchive.getArticles();
+            articlesXML.forEach(articlesModel::addElement);
+            lsArticles.setModel(articlesModel);
+            clearForm();
+            lbRss.setText("Current RSS feed: " + XML_FILE);
+        }
+        catch (UnmarshalException ex) {
+            MessageUtils.showErrorMessage("Load From XML Error", XML_FILE + " does not exist.");
+        }
+        catch (JAXBException ex) {
+            Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Load From XML Error", "Cannot load articles from XML.");
+        }
     }
 }

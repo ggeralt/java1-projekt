@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 public class MainAdminPanel extends javax.swing.JPanel {
     private static final String ASSETS = "./assets";
@@ -112,14 +113,19 @@ public class MainAdminPanel extends javax.swing.JPanel {
         } catch (Exception ex) {
             Logger.getLogger(MainAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("Article Deletion Error", "Unable to delete articles.");
+            return;
         }
 
-        try {
-            File directory = new File(ASSETS);
-            FileUtils.cleanDirectory(directory);
-        } catch (IOException ex) {
-            Logger.getLogger(MainAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
-            MessageUtils.showErrorMessage("Image Deletion Error", "Unable to delete images.");
+        int dialogResult = MessageUtils.showConfirmDialog("Delete Saved Images", "Do you also want to delete all saved article images in the 'assets' directory?");
+        
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            try {
+                File directory = new File(ASSETS);
+                FileUtils.cleanDirectory(directory);
+            } catch (IOException ex) {
+                Logger.getLogger(MainAdminPanel.class.getName()).log(Level.SEVERE, null, ex);
+                MessageUtils.showErrorMessage("Image Deletion Error", "Unable to delete images.");
+            }
         }
     }//GEN-LAST:event_btnDeleteAllArticlesActionPerformed
 
