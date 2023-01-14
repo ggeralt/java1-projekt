@@ -24,12 +24,12 @@ public class SQLRepository implements Repository {
     private static final String ROLE_ID = "RoleID";
     
     private static final String ID_ARTICLE = "IDArticle";
+    private static final String CATEGORY_ID = "CategoryID";
     private static final String TITLE = "Title";
     private static final String LINK = "Link";
     private static final String DESCRIPTION = "Description";
     private static final String PICTURE_PATH = "PicturePath";
     private static final String PUBLISHED_DATE = "PublishedDate";
-    private static final String CATEGORY_ID = "CategoryID";
 
     private static final String CREATE_CATEGORY = "{ CALL createCategory (?,?) }";
     private static final String UPDATE_CATEGORY = "{ CALL updateCategory (?,?) }";
@@ -62,12 +62,12 @@ public class SQLRepository implements Repository {
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(CREATE_ARTICLE)) {
 
+            stmt.setInt("@" + CATEGORY_ID, article.getCategoryId());
             stmt.setString("@" + TITLE, article.getTitle());
             stmt.setString("@" + LINK, article.getLink());
             stmt.setString("@" + DESCRIPTION, article.getDescription());
             stmt.setString("@" + PICTURE_PATH, article.getPicturePath());
             stmt.setString("@" + PUBLISHED_DATE, article.getPublishedDate().format(Article.DATE_FORMATTER));
-            stmt.setInt("@" + CATEGORY_ID, article.getCategoryId());
             stmt.registerOutParameter("@" + ID_ARTICLE, Types.INTEGER);
 
             stmt.executeUpdate();
@@ -83,12 +83,12 @@ public class SQLRepository implements Repository {
                 CallableStatement stmt = con.prepareCall(CREATE_ARTICLE)) {
 
             for (Article article : articles) {
+                stmt.setInt("@" + CATEGORY_ID, article.getCategoryId());
                 stmt.setString("@" + TITLE, article.getTitle());
                 stmt.setString("@" + LINK, article.getLink());
                 stmt.setString("@" + DESCRIPTION, article.getDescription());
                 stmt.setString("@" + PICTURE_PATH, article.getPicturePath());
                 stmt.setString("@" + PUBLISHED_DATE, article.getPublishedDate().format(Article.DATE_FORMATTER));
-                stmt.setInt("@" + CATEGORY_ID, article.getCategoryId());
                 stmt.registerOutParameter("@" + ID_ARTICLE, Types.INTEGER);
 
                 stmt.executeUpdate();
@@ -102,12 +102,12 @@ public class SQLRepository implements Repository {
         try (Connection con = dataSource.getConnection();
                 CallableStatement stmt = con.prepareCall(UPDATE_ARTICLE)) {
 
+            stmt.setInt("@" + CATEGORY_ID, data.getCategoryId());
             stmt.setString("@" + TITLE, data.getTitle());
             stmt.setString("@" + LINK, data.getLink());
             stmt.setString("@" + DESCRIPTION, data.getDescription());
             stmt.setString("@" + PICTURE_PATH, data.getPicturePath());
             stmt.setString("@" + PUBLISHED_DATE, data.getPublishedDate().format(Article.DATE_FORMATTER));
-            stmt.setInt("@" + CATEGORY_ID, data.getCategoryId());
             stmt.setInt("@" + ID_ARTICLE, id);
 
             stmt.executeUpdate();
@@ -155,12 +155,12 @@ public class SQLRepository implements Repository {
                 if (rs.next()) {
                     return Optional.of(new Article(
                             rs.getInt(ID_ARTICLE),
+                            rs.getInt(CATEGORY_ID),
                             rs.getString(TITLE),
                             rs.getString(LINK),
                             rs.getString(DESCRIPTION),
                             rs.getString(PICTURE_PATH),
-                            LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER),
-                            rs.getInt(CATEGORY_ID))
+                            LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER))
                     );
                 }
             }
@@ -180,12 +180,12 @@ public class SQLRepository implements Repository {
             while (rs.next()) {                
                 articles.add(new Article(
                         rs.getInt(ID_ARTICLE),
+                        rs.getInt(CATEGORY_ID),
                         rs.getString(TITLE),
                         rs.getString(LINK),
                         rs.getString(DESCRIPTION),
                         rs.getString(PICTURE_PATH),
-                        LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER),
-                        rs.getInt(CATEGORY_ID))
+                        LocalDateTime.parse(rs.getString(PUBLISHED_DATE), Article.DATE_FORMATTER))
                 );
             }
         }

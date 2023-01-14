@@ -145,13 +145,14 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
                 Optional<Article> optArticle = repository.selectArticle(articleId);
                 
                 Article _article = new Article(
-                        articleId, 
+                        articleId,
+                        optArticle.get().getCategoryId(),
                         optArticle.get().getTitle(), 
                         optArticle.get().getLink(), 
                         optArticle.get().getDescription(), 
                         optArticle.get().getPicturePath(), 
-                        optArticle.get().getPublishedDate(), 
-                        optArticle.get().getCategoryId());
+                        optArticle.get().getPublishedDate()
+                );
                 
                 articlesForXML.add(_article);
             } catch (Exception ex) {

@@ -279,12 +279,12 @@ public class EditArticlesUserPanel extends javax.swing.JPanel {
             try {
                 String localPicturePath = uploadPicture();
                 Article article = new Article(
+                        cbCategories.getItemAt(cbCategories.getSelectedIndex()).getId(),
                         tfTitle.getText().trim(),
                         tfLink.getText().trim(),
                         taDescription.getText().trim(),
                         localPicturePath,
-                        LocalDateTime.parse(tfPublishedDate.getText().trim(), Article.DATE_FORMATTER),
-                        cbCategories.getItemAt(cbCategories.getSelectedIndex()).getId()
+                        LocalDateTime.parse(tfPublishedDate.getText().trim(), Article.DATE_FORMATTER)
                 );
                 repository.createArticle(article);
                 articlesTableModel.setArticles(repository.selectArticles());

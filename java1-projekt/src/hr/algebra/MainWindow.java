@@ -2,7 +2,7 @@ package hr.algebra;
 
 import hr.algebra.model.User;
 import hr.algebra.utils.MessageUtils;
-import hr.algebra.view.EditArticlesAdminPanel;
+import hr.algebra.view.MainAdminPanel;
 import hr.algebra.view.EditUsersAdminPanel;
 import hr.algebra.view.EditArticlesUserPanel;
 import hr.algebra.view.EditCategoriesAdminPanel;
@@ -21,7 +21,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class MainWindow extends javax.swing.JFrame {
     private static final String VIEW_ARTICLES = "View articles";
     private static final String EDIT_ARTICLES = "Edit articles";
-    private static final String ARTICLE = "Article";
+    private static final String MAIN_PANEL = "Main panel";
     private static final String USER = "User";
     private static final String CATEGORIES = "Categories";
     private static final String DEFAULT_THEME = "javax.swing.plaf.nimbus.NimbusLookAndFeel";
@@ -225,7 +225,7 @@ public class MainWindow extends javax.swing.JFrame {
         lbUsername.setText(user.get().getUsername());
 
         if (user.get().getRoleID() == 1) {
-            tpContent.add(ARTICLE, new EditArticlesAdminPanel());
+            tpContent.add(MAIN_PANEL, new MainAdminPanel());
             tpContent.add(USER, new EditUsersAdminPanel());
             tpContent.add(CATEGORIES, new EditCategoriesAdminPanel());
         }

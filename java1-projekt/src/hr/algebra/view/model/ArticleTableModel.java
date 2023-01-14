@@ -1,15 +1,27 @@
 package hr.algebra.view.model;
 
+import hr.algebra.dal.Repository;
+import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Article;
+import hr.algebra.utils.MessageUtils;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
 
 public class ArticleTableModel extends AbstractTableModel {
     private static final String[] COLUMN_NAMES = {"ID", "Category", "Title", "Link", "Description", "Picture path", "Published date"};
     
     private List<Article> articles;
+    private Repository repository;
 
     public ArticleTableModel(List<Article> articles) {
+        try {
+            initRepository();
+        } catch (Exception ex) {
+            Logger.getLogger(ArticleTableModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         this.articles = articles;
     }
 
@@ -34,7 +46,14 @@ public class ArticleTableModel extends AbstractTableModel {
             case 0:
                 return articles.get(rowIndex).getId();
             case 1:
-                return articles.get(rowIndex).getCategoryName(articles.get(rowIndex).getCategoryId());
+            {
+                try {
+                    return repository.selectCategoryByID(articles.get(rowIndex).getCategoryId()).get().getName();
+                } catch (Exception ex) {
+                    Logger.getLogger(ArticleTableModel.class.getName()).log(Level.SEVERE, null, ex);
+                    MessageUtils.showErrorMessage("Get Category Name Error", "Cannot get category names.");
+                }
+            }
             case 2:
                 return articles.get(rowIndex).getTitle();
             case 3:
@@ -63,5 +82,9 @@ public class ArticleTableModel extends AbstractTableModel {
         }
         
         return super.getColumnClass(columnIndex); 
+    }
+    
+    private void initRepository() throws Exception {
+        repository = RepositoryFactory.getRepository();
     }
 }

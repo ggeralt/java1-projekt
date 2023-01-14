@@ -15,6 +15,9 @@ public class Article {
     @XmlAttribute
     private int id;
     
+    @XmlElement(name = "categoryid")
+    private int categoryId;
+    
     private String title;
     private String link;
     private String description;
@@ -26,22 +29,19 @@ public class Article {
     @XmlElement(name = "publisheddate")
     private LocalDateTime publishedDate;
     
-    @XmlElement(name = "categoryid")
-    private int categoryId;
-    
     public Article() {}
     
-    public Article(String title, String link, String description, String picturePath, LocalDateTime publishedDate, int categoryId) {
+    public Article(int categoryId, String title, String link, String description, String picturePath, LocalDateTime publishedDate) {
+        this.categoryId = categoryId;
         this.title = title;
         this.link = link;
         this.description = description;
         this.picturePath = picturePath;
         this.publishedDate = publishedDate;
-        this.categoryId = categoryId;
     }
     
-    public Article(int id, String title, String link, String description, String picturePath, LocalDateTime publishedDate, int categoryId) {
-        this(title, link, description, picturePath, publishedDate, categoryId);
+    public Article(int id, int categoryId, String title, String link, String description, String picturePath, LocalDateTime publishedDate) {
+        this(categoryId, title, link, description, picturePath, publishedDate);
         this.id = id;
     }
 
@@ -49,6 +49,14 @@ public class Article {
         return id;
     }
 
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Category category) {
+        this.categoryId = category.getId();
+    }
+    
     public String getTitle() {
         return title;
     }
@@ -87,18 +95,6 @@ public class Article {
 
     public void setPublishedDate(LocalDateTime publishedDate) {
         this.publishedDate = publishedDate;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Category category) {
-        this.categoryId = category.getId();
-    }
-    
-    public String getCategoryName(int categoryId) {
-        return "N/A";
     }
     
     @Override

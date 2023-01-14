@@ -15,12 +15,12 @@ GO
 CREATE TABLE Article
 (
 	IDArticle INT PRIMARY KEY IDENTITY,
+	CategoryID INT FOREIGN KEY REFERENCES [Category](IDCategory),
 	Title NVARCHAR(300),
 	Link NVARCHAR(300),
 	[Description] NVARCHAR(900),
 	PicturePath NVARCHAR(90),
-	PublishedDate NVARCHAR(90),
-	CategoryID INT FOREIGN KEY REFERENCES [Category](IDCategory)
+	PublishedDate NVARCHAR(90)
 )
 GO
 
@@ -145,38 +145,38 @@ END
 GO
 
 CREATE PROCEDURE createArticle
+	@CategoryID INT,
 	@Title NVARCHAR(300),
 	@Link NVARCHAR(300),
 	@Description NVARCHAR(900),
 	@PicturePath NVARCHAR(90),
 	@PublishedDate NVARCHAR(90),
-	@CategoryID INT,
 	@IDArticle INT OUTPUT
 AS 
 BEGIN 
-	INSERT INTO Article VALUES(@Title, @Link, @Description, @PicturePath, @PublishedDate, @CategoryID)
+	INSERT INTO Article VALUES(@CategoryID, @Title, @Link, @Description, @PicturePath, @PublishedDate)
 	SET @IDArticle = SCOPE_IDENTITY()
 END
 GO
 
 CREATE PROCEDURE updateArticle
+	@CategoryID INT,
 	@Title NVARCHAR(300),
 	@Link NVARCHAR(300),
 	@Description NVARCHAR(900),
 	@PicturePath NVARCHAR(90),
 	@PublishedDate NVARCHAR(90),
-	@CategoryID INT,
 	@IDArticle INT
 	 
 AS 
 BEGIN 
-	UPDATE Article SET 
+	UPDATE Article SET
+		CategoryID = @CategoryID,
 		Title = @Title,
 		Link = @Link,
 		[Description] = @Description,
 		PicturePath = @PicturePath,
-		PublishedDate = @PublishedDate,
-		CategoryID = @CategoryID
+		PublishedDate = @PublishedDate
 	WHERE 
 		IDArticle = @IDArticle
 END
