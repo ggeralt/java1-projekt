@@ -10,6 +10,8 @@ import hr.algebra.utils.JAXBUtils;
 import hr.algebra.utils.MessageUtils;
 import static hr.algebra.utils.MessageUtils.showInformationMessage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -148,14 +150,24 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_lsArticlesKeyReleased
 
     private void btnSaveToXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveToXMLActionPerformed
+        try {
+            new FileOutputStream(new File(XML_FILE), false).close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        articlesXML.clear();
+        
         for (int i = 0; i < lsArticles.getModel().getSize(); i++) {
-            int articleId = lsArticles.getModel().getElementAt(i).getId();
-            
             try {
-                Optional<Article> optArticle = repository.selectArticle(articleId);
-                
+                Optional<Article> optArticle = repository.selectArticle(
+                        lsArticles.getModel().getElementAt(i).getId()
+                );
+
                 articlesXML.add(new Article(
-                        articleId,
+                        optArticle.get().getId(),
                         optArticle.get().getCategoryId(),
                         optArticle.get().getTitle(), 
                         optArticle.get().getLink(), 
@@ -173,6 +185,7 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
             showInformationMessage("XML File Saved", "Articles are successfully saved into " + XML_FILE);
         } catch (JAXBException ex) {
             Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("XML File Saving Error", "Unable to save articles to " + XML_FILE);
         }
     }//GEN-LAST:event_btnSaveToXMLActionPerformed
 

@@ -20,6 +20,8 @@ public class ArticleTableModel extends AbstractTableModel {
             initRepository();
         } catch (Exception ex) {
             Logger.getLogger(ArticleTableModel.class.getName()).log(Level.SEVERE, null, ex);
+            MessageUtils.showErrorMessage("Database Init Error", "Cannot initiate the database.");
+            System.exit(1);
         }
         
         this.articles = articles;
@@ -52,6 +54,7 @@ public class ArticleTableModel extends AbstractTableModel {
                 } catch (Exception ex) {
                     Logger.getLogger(ArticleTableModel.class.getName()).log(Level.SEVERE, null, ex);
                     MessageUtils.showErrorMessage("Get Category Name Error", "Cannot get category names.");
+                    System.exit(1);
                 }
             }
             case 2:
