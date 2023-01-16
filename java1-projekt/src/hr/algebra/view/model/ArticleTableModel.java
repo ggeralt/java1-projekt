@@ -3,8 +3,10 @@ package hr.algebra.view.model;
 import hr.algebra.dal.Repository;
 import hr.algebra.dal.RepositoryFactory;
 import hr.algebra.model.Article;
+import hr.algebra.model.Category;
 import hr.algebra.utils.MessageUtils;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.AbstractTableModel;
@@ -50,7 +52,13 @@ public class ArticleTableModel extends AbstractTableModel {
             case 1:
             {
                 try {
-                    return repository.selectCategoryByID(articles.get(rowIndex).getCategoryId()).get().getName();
+                    Optional<Category> optCategory = repository.selectCategoryByID(articles.get(rowIndex).getCategoryId());
+                    
+                    if (optCategory.isPresent()) {
+                        return optCategory.get().getName();
+                    }
+                    
+                    return "N/A";
                 } catch (Exception ex) {
                     Logger.getLogger(ArticleTableModel.class.getName()).log(Level.SEVERE, null, ex);
                     MessageUtils.showErrorMessage("Get Category Name Error", "Cannot get category names.");

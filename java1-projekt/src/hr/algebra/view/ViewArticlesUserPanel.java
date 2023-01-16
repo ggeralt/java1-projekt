@@ -8,7 +8,6 @@ import hr.algebra.parser.rss.ArticleParser;
 import hr.algebra.utils.IconUtils;
 import hr.algebra.utils.JAXBUtils;
 import hr.algebra.utils.MessageUtils;
-import static hr.algebra.utils.MessageUtils.showInformationMessage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -182,7 +181,7 @@ public class ViewArticlesUserPanel extends javax.swing.JPanel {
         
         try {
             JAXBUtils.save(new ArticleArchive(articlesXML), XML_FILE);
-            showInformationMessage("XML File Saved", "Articles are successfully saved into " + XML_FILE);
+            MessageUtils.showInformationMessage("XML File Saved", "Articles are successfully saved into " + XML_FILE);
         } catch (JAXBException ex) {
             Logger.getLogger(ViewArticlesUserPanel.class.getName()).log(Level.SEVERE, null, ex);
             MessageUtils.showErrorMessage("XML File Saving Error", "Unable to save articles to " + XML_FILE);

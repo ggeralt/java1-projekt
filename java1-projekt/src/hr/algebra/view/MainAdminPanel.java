@@ -17,7 +17,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 public class MainAdminPanel extends javax.swing.JPanel {
-    private static final String ASSETS = "./assets";
+    private static final String ASSETS = "assets";
     private DefaultListModel<Article> articlesModel;
     private Repository repository;
     private List<Category> categories = new ArrayList<>();
@@ -116,7 +116,7 @@ public class MainAdminPanel extends javax.swing.JPanel {
             return;
         }
 
-        int dialogResult = MessageUtils.showConfirmDialog("Delete Saved Images", "Do you also want to delete all saved article images in the 'assets' directory?");
+        int dialogResult = MessageUtils.showConfirmDialog("Delete Saved Images", "Do you also want to delete all saved article images in the '" + ASSETS + "' directory?");
         
         if (dialogResult == JOptionPane.YES_OPTION) {
             try {
